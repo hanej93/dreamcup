@@ -32,11 +32,9 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepositoryCustom {
     }
 
     private BooleanExpression keywordContains(String schType, String keyword) {
-        switch (schType) {
-            case "todo":
-                return null;
-            default:
-                return StringUtils.hasText(keyword) ? chatRoom.title.contains(keyword) : null;
-        }
+		if ("title".equals(schType)) {
+			return StringUtils.hasText(keyword) ? chatRoom.title.contains(keyword) : null;
+		}
+		return null;
     }
 }
