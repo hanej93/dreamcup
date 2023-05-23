@@ -108,6 +108,27 @@ class ChatRoomServiceTest {
 	}
 
 	@Test
+	@DisplayName("채팅방 페이지 조회, 검색 테스트(검색조건, 페이지 제외)")
+	void getPagenatedList2() {
+		// given
+		saveChatRoomsForTest();
+		ChatRoom chatRoom = ChatRoom.builder()
+			.title("제목입니다.")
+			.build();
+		chatRoomRepository.save(chatRoom);
+
+		ChatRoomSearchRequestDto request = ChatRoomSearchRequestDto.builder()
+			.build();
+
+		// when
+		List<ChatRoomResponseDto> pagenatedList = chatRoomService.getPagenatedList(request);
+
+		// then
+		assertThat(pagenatedList.size()).isEqualTo(10L);
+		assertThat(pagenatedList).extracting("title").contains("제목입니다.");
+	}
+
+	@Test
 	@DisplayName("채팅방 id로 조회")
 	void findById() {
 		// given
