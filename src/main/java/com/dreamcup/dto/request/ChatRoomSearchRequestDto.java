@@ -1,13 +1,19 @@
 package com.dreamcup.dto.request;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 @Getter
+@Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ChatRoomSearchRequestDto {
 
     private static final int MAX_SIZE = 2000;
