@@ -3,9 +3,12 @@ package com.dreamcup.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.annotations.Cascade;
+
 import com.dreamcup.domain.common.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,7 +31,7 @@ public class ChatRoom extends BaseEntity {
 	@Column(length = 100, nullable = false)
 	private String title;
 
-	@OneToMany(mappedBy = "chatRoom")
+	@OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
 	@JsonIgnore
 	private List<Chat> chats = new ArrayList<>();
 
@@ -37,7 +40,8 @@ public class ChatRoom extends BaseEntity {
 		this.title = title;
 	}
 
-	public void edit(String title) {
+	public void update(String title) {
 		this.title = title;
 	}
+
 }
