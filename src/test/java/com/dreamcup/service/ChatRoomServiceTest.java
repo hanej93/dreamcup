@@ -29,7 +29,7 @@ class ChatRoomServiceTest {
 	private ChatRoomRepository chatRoomRepository;
 
 	@BeforeEach
-	void setUp() {
+	void clean() {
 		chatRoomRepository.deleteAll();
 	}
 
