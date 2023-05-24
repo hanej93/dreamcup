@@ -1,9 +1,7 @@
 package com.dreamcup.member.service;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.dreamcup.member.dto.request.MemberSignupRequestDto;
 import com.dreamcup.member.entity.Member;
+import com.dreamcup.member.code.AuthorityEnum;
 import com.dreamcup.member.exception.DuplicateMemberException;
 import com.dreamcup.member.repository.MemberRepository;
 
@@ -47,13 +46,13 @@ class MemberServiceTest {
 		memberService.signup(requestDto);
 
 	    // then
-		Member findMember = memberRepository.findOneWithAuthoritiesByUsername("user")
+		Member findMember = memberRepository.findWithAuthoritiesByUsername("user")
 			.orElseThrow(() -> new RuntimeException("유저를 찾을 수 없습니다."));
 
 		assertThat(findMember).extracting("username").isEqualTo("user");
 		assertThat(passwordEncoder.matches("1234", findMember.getPassword())).isTrue();
 		assertThat(findMember).extracting("nickname").isEqualTo("user-nick");
-		assertThat(findMember.getAuthorities()).extracting("authorityName").containsExactly("ROLE_USER");
+		assertThat(findMember.getAuthorities()).extracting("id").extracting("authority").containsExactly(AuthorityEnum.ROLE_USER);
 	}
 
 	@Test

@@ -22,7 +22,7 @@ public class QMember extends EntityPathBase<Member> {
 
     public final BooleanPath activated = createBoolean("activated");
 
-    public final SetPath<Authority, QAuthority> authorities = this.<Authority, QAuthority>createSet("authorities", Authority.class, QAuthority.class, PathInits.DIRECT2);
+    public final SetPath<MemberAuthority, QMemberAuthority> authorities = this.<MemberAuthority, QMemberAuthority>createSet("authorities", MemberAuthority.class, QMemberAuthority.class, PathInits.DIRECT2);
 
     public final NumberPath<Long> memberId = createNumber("memberId", Long.class);
 

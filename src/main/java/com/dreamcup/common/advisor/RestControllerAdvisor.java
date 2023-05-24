@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestControllerAdvice
-public class ExceptionAdvice {
+public class RestControllerAdvisor {
 
 
 	@ResponseStatus(HttpStatus.BAD_REQUEST)

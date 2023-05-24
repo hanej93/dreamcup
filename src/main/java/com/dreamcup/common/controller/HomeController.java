@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.dreamcup.chatroom.entity.ChatRoom;
 import com.dreamcup.chatroom.service.ChatRoomService;
 import com.dreamcup.common.service.ChatService;
-import com.dreamcup.member.entity.Authority;
-import com.dreamcup.member.repository.AuthorityRepository;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +17,6 @@ public class HomeController {
 
 	private final ChatRoomService chatRoomService;
 	private final ChatService chatService;
-	private final AuthorityRepository authorityRepository;
 
 	@GetMapping("/user")
 	@ResponseBody
@@ -46,12 +43,6 @@ public class HomeController {
 			chatService.save("내용" + i, chatRoom);
 			chatService.save("내요옹" + i, chatRoom);
 		}
-
-		// authority 생성
-		Authority authority = Authority.builder()
-			.authorityName("ROLE_USER")
-			.build();
-		authorityRepository.save(authority);
 	}
 	
 }

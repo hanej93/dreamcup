@@ -10,6 +10,6 @@ import com.dreamcup.member.entity.Member;
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
 	@EntityGraph(attributePaths = "authorities")
-	Optional<Member> findOneWithAuthoritiesByUsername(String username);
+	Optional<Member> findWithAuthoritiesByUsername(String username);
 
 }

@@ -3,14 +3,13 @@ package com.dreamcup.member.entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,7 +22,6 @@ public class Member {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "member_id")
 	private Long memberId;
 
 	@Column(length = 50, unique = true)
@@ -35,16 +33,11 @@ public class Member {
 	@Column(length = 50)
 	private String nickname;
 
-	@Column(name = "activated")
+	@Column
 	private boolean activated;
 
-	@ManyToMany
-	@JoinTable(
-		name = "user_authority",
-		joinColumns = {@JoinColumn(name = "member_id", referencedColumnName = "member_id")},
-		inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")}
-	)
-	private Set<Authority> authorities = new HashSet<>();
+	@OneToMany(mappedBy = "id.member", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<MemberAuthority> authorities = new HashSet<>();
 
 	@Builder
 	public Member(String username, String password, String nickname, boolean activated) {

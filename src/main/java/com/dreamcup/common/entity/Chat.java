@@ -22,11 +22,10 @@ import lombok.NoArgsConstructor;
 public class Chat extends BaseEntity {
 
 	@Id
-	@Column(name = "chat_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long chatId;
 
-	@Column(name = "message", nullable = false)
+	@Column(nullable = false)
 	private String message;
 
 	@ManyToOne(fetch = FetchType.LAZY)

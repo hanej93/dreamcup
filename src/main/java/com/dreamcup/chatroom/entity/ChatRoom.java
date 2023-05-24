@@ -25,10 +25,9 @@ public class ChatRoom extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "chat_room_id")
 	private Long chatRoomId;
 
-	@Column(name = "title", length = 100, nullable = false)
+	@Column(length = 100, nullable = false)
 	private String title;
 
 	@OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)

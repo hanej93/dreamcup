@@ -5,8 +5,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.dreamcup.member.dto.request.MemberSignupRequestDto;
-import com.dreamcup.member.entity.Authority;
 import com.dreamcup.member.entity.Member;
+import com.dreamcup.member.entity.MemberAuthority;
+import com.dreamcup.member.code.AuthorityEnum;
 import com.dreamcup.member.exception.DuplicateMemberException;
 import com.dreamcup.member.repository.MemberRepository;
 
@@ -24,7 +25,7 @@ public class MemberService {
 
 	@Transactional
 	public Long signup(MemberSignupRequestDto requestDto) {
-		memberRepository.findOneWithAuthoritiesByUsername(requestDto.getUsername())
+		memberRepository.findWithAuthoritiesByUsername(requestDto.getUsername())
 			.ifPresent(user -> {
 				throw new DuplicateMemberException();
 			});
@@ -36,10 +37,8 @@ public class MemberService {
 			.activated(true)
 			.build();
 
-		Authority authority = Authority.builder()
-			.authorityName("ROLE_USER")
-			.build();
-		member.getAuthorities().add(authority);
+		MemberAuthority memberAuthority = new MemberAuthority();
+		memberAuthority.addMemberAuthority(member, AuthorityEnum.ROLE_USER);
 
 		memberRepository.save(member);
 

@@ -10,8 +10,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
 import com.dreamcup.config.QueryDslConfig;
-import com.dreamcup.member.entity.Authority;
 import com.dreamcup.member.entity.Member;
+import com.dreamcup.member.entity.MemberAuthority;
+import com.dreamcup.member.code.AuthorityEnum;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -26,17 +27,9 @@ class MemberRepositoryTest {
 	@Autowired
 	private MemberRepository memberRepository;
 
-	@Autowired
-	private AuthorityRepository authorityRepository;
-
 	@BeforeEach
 	void setup() {
 		memberRepository.deleteAll();
-
-		Authority authority = Authority.builder()
-			.authorityName("ROLE_USER")
-			.build();
-		authorityRepository.save(authority);
 	}
 
 	@Test
@@ -50,15 +43,13 @@ class MemberRepositoryTest {
 			.activated(true)
 			.build();
 
-		Authority authority = Authority.builder()
-			.authorityName("ROLE_USER")
-			.build();
-		member.getAuthorities().add(authority);
+		MemberAuthority memberAuthority = new MemberAuthority();
+		memberAuthority.addMemberAuthority(member, AuthorityEnum.ROLE_USER);
 
 		em.persist(member);
 
 		// when
-		Member findMember = memberRepository.findOneWithAuthoritiesByUsername(member.getUsername())
+		Member findMember = memberRepository.findWithAuthoritiesByUsername(member.getUsername())
 			.orElseThrow(() -> new RuntimeException("유저를 찾을 수 없습니다."));
 
 		// then
@@ -66,7 +57,7 @@ class MemberRepositoryTest {
 		assertThat(findMember).extracting("password").isEqualTo("1234");
 		assertThat(findMember).extracting("nickname").isEqualTo("user-nick");
 		assertThat(findMember.isActivated()).isTrue();
-		assertThat(findMember.getAuthorities()).extracting("authorityName").containsExactly("ROLE_USER");
+		assertThat(findMember.getAuthorities()).extracting("id").extracting("authority").containsExactly(AuthorityEnum.ROLE_USER);
 	}
 
 }
