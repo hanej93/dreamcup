@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.dreamcup.member.dto.request.MemberSignupRequestDto;
 import com.dreamcup.member.entity.Authority;
 import com.dreamcup.member.entity.Member;
+import com.dreamcup.member.exception.DuplicateMemberException;
 import com.dreamcup.member.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -22,10 +23,10 @@ public class MemberService {
 	private final PasswordEncoder passwordEncoder;
 
 	@Transactional
-	public void signup(MemberSignupRequestDto requestDto) {
+	public Long signup(MemberSignupRequestDto requestDto) {
 		memberRepository.findOneWithAuthoritiesByUsername(requestDto.getUsername())
 			.ifPresent(user -> {
-				throw new IllegalArgumentException("이미 가입되어 있는 유저입니다.");
+				throw new DuplicateMemberException();
 			});
 
 		Member member = Member.builder()
@@ -41,6 +42,8 @@ public class MemberService {
 		member.getAuthorities().add(authority);
 
 		memberRepository.save(member);
+
+		return member.getMemberId();
 	}
 
 
