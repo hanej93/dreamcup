@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
@@ -19,6 +20,12 @@ import org.springframework.security.web.access.expression.WebExpressionAuthoriza
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+
+	@Bean
+	public BCryptPasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {
@@ -33,8 +40,8 @@ public class SecurityConfig {
 			.csrf(AbstractHttpConfigurer::disable)
 			.authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> {
 				authorizationManagerRequestMatcherRegistry
-					.requestMatchers("/auth/login").permitAll()
-					.requestMatchers("/auth/signup").permitAll()
+					.requestMatchers("/api/login").permitAll()
+					.requestMatchers("/api/signup").permitAll()
 					.requestMatchers("/user").hasAnyRole("USER", "ADMIN")
 					.requestMatchers("/admin").access(new WebExpressionAuthorizationManager("hasRole('ADMIN')"))
 					.anyRequest().authenticated();
