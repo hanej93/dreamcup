@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.dreamcup.member.dto.request.MemberSignupRequestDto;
 import com.dreamcup.member.entity.Member;
+import com.dreamcup.member.exception.DuplicateMemberException;
 import com.dreamcup.member.repository.MemberRepository;
 
 @SpringBootTest
@@ -25,6 +27,11 @@ class MemberServiceTest {
 
 	@Autowired
 	PasswordEncoder passwordEncoder;
+
+	@BeforeEach
+	public void clean() throws Exception {
+		memberRepository.deleteAll();
+	}
 
 	@Test
 	@DisplayName("회원가입")
@@ -47,5 +54,28 @@ class MemberServiceTest {
 		assertThat(passwordEncoder.matches("1234", findMember.getPassword())).isTrue();
 		assertThat(findMember).extracting("nickname").isEqualTo("user-nick");
 		assertThat(findMember.getAuthorities()).extracting("authorityName").containsExactly("ROLE_USER");
+	}
+
+	@Test
+	@DisplayName("회원가입(이름 중복)")
+	void signupDuplicatedUsername() throws Exception {
+	    // given
+		Member member = Member.builder()
+			.username("user")
+			.password("1234")
+			.nickname("user-nick")
+			.activated(true)
+			.build();
+		memberRepository.save(member);
+
+		MemberSignupRequestDto requestDto = MemberSignupRequestDto.builder()
+			.username("user")
+			.password("1234")
+			.nickname("user-nick2")
+			.build();
+
+		// expected
+		assertThatThrownBy(() -> memberService.signup(requestDto))
+			.isInstanceOf(DuplicateMemberException.class);
 	}
 }

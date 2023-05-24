@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.dreamcup.member.dto.request.MemberSignupRequestDto;
+import com.dreamcup.member.entity.Member;
 import com.dreamcup.member.repository.MemberRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -53,6 +54,37 @@ class MemberControllerTest {
 				.content(request)
 			)
 			.andExpect(status().isCreated())
+			.andDo(print());
+	}
+
+	@Test
+	@DisplayName("회원가입(이름 중복)")
+	void signupDuplicatedUsername() throws Exception {
+		// given
+		Member member = Member.builder()
+			.username("user")
+			.password("1234")
+			.nickname("user-nick2")
+			.activated(true)
+			.build();
+		memberRepository.save(member);
+
+		MemberSignupRequestDto requestDto = MemberSignupRequestDto.builder()
+			.username("user")
+			.password("1234")
+			.nickname("user-nick")
+			.build();
+
+		String request = objectMapper.writeValueAsString(requestDto);
+
+		// expected
+		mockMvc.perform(MockMvcRequestBuilders.post("/api/signup")
+				.contentType(APPLICATION_JSON)
+				.content(request)
+			)
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.code").value("400"))
+			.andExpect(jsonPath("$.message").exists())
 			.andDo(print());
 	}
 }

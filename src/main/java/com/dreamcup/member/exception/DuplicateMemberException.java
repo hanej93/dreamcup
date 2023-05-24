@@ -18,6 +18,6 @@ public class DuplicateMemberException extends CustomException {
 
 	@Override
 	public int getStatusCode() {
-		return HttpStatus.NOT_FOUND.value();
+		return HttpStatus.BAD_REQUEST.value();
 	}
 }
