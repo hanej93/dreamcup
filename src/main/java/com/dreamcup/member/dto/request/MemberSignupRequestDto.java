@@ -1,6 +1,4 @@
-package com.dreamcup.user.dto.request;
-
-import java.util.Set;
+package com.dreamcup.member.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +11,7 @@ import lombok.Setter;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserSignupRequestDto {
+public class MemberSignupRequestDto {
 
 	private String username;
 	private String password;

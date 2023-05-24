@@ -1,4 +1,4 @@
-package com.dreamcup.user.entity;
+package com.dreamcup.member.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

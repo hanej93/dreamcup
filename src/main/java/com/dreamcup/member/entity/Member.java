@@ -1,4 +1,4 @@
-package com.dreamcup.user.entity;
+package com.dreamcup.member.entity;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,15 +16,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity(name = "users")
+@Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User {
+public class Member {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "user_id")
-	private Long userId;
+	@Column(name = "member_id")
+	private Long memberId;
 
 	@Column(length = 50, unique = true)
 	private String username;
@@ -41,13 +41,13 @@ public class User {
 	@ManyToMany
 	@JoinTable(
 		name = "user_authority",
-		joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
+		joinColumns = {@JoinColumn(name = "member_id", referencedColumnName = "member_id")},
 		inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")}
 	)
 	private Set<Authority> authorities = new HashSet<>();
 
 	@Builder
-	public User(String username, String password, String nickname, boolean activated) {
+	public Member(String username, String password, String nickname, boolean activated) {
 		this.username = username;
 		this.password = password;
 		this.nickname = nickname;

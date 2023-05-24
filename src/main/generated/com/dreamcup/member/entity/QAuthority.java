@@ -1,4 +1,4 @@
-package com.dreamcup.user.entity;
+package com.dreamcup.member.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -15,7 +15,7 @@ import com.querydsl.core.types.Path;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QAuthority extends EntityPathBase<Authority> {
 
-    private static final long serialVersionUID = 1604414037L;
+    private static final long serialVersionUID = 2107727078L;
 
     public static final QAuthority authority = new QAuthority("authority");
 

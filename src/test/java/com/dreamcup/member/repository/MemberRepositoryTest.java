@@ -1,4 +1,4 @@
-package com.dreamcup.user.repository;
+package com.dreamcup.member.repository;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -10,28 +10,28 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
 import com.dreamcup.config.QueryDslConfig;
-import com.dreamcup.user.entity.Authority;
-import com.dreamcup.user.entity.User;
+import com.dreamcup.member.entity.Authority;
+import com.dreamcup.member.entity.Member;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
 @Import({QueryDslConfig.class})
 @DataJpaTest
-class UserRepositoryTest {
+class MemberRepositoryTest {
 
 	@PersistenceContext
 	private EntityManager em;
 
 	@Autowired
-	private UserRepository userRepository;
+	private MemberRepository memberRepository;
 
 	@Autowired
 	private AuthorityRepository authorityRepository;
 
 	@BeforeEach
 	void setup() {
-		userRepository.deleteAll();
+		memberRepository.deleteAll();
 
 		Authority authority = Authority.builder()
 			.authorityName("ROLE_USER")
@@ -43,7 +43,7 @@ class UserRepositoryTest {
 	@DisplayName("유저, 권한 조회(이름)")
 	public void findOneWithAuthoritiesByUsername() {
 		// given
-		User user = User.builder()
+		Member member = Member.builder()
 			.username("user")
 			.password("1234")
 			.nickname("user-nick")
@@ -53,20 +53,20 @@ class UserRepositoryTest {
 		Authority authority = Authority.builder()
 			.authorityName("ROLE_USER")
 			.build();
-		user.getAuthorities().add(authority);
+		member.getAuthorities().add(authority);
 
-		em.persist(user);
+		em.persist(member);
 
 		// when
-		User findUser = userRepository.findOneWithAuthoritiesByUsername(user.getUsername())
+		Member findMember = memberRepository.findOneWithAuthoritiesByUsername(member.getUsername())
 			.orElseThrow(() -> new RuntimeException("유저를 찾을 수 없습니다."));
 
 		// then
-		assertThat(findUser).extracting("username").isEqualTo("user");
-		assertThat(findUser).extracting("password").isEqualTo("1234");
-		assertThat(findUser).extracting("nickname").isEqualTo("user-nick");
-		assertThat(findUser.isActivated()).isTrue();
-		assertThat(findUser.getAuthorities()).extracting("authorityName").containsExactly("ROLE_USER");
+		assertThat(findMember).extracting("username").isEqualTo("user");
+		assertThat(findMember).extracting("password").isEqualTo("1234");
+		assertThat(findMember).extracting("nickname").isEqualTo("user-nick");
+		assertThat(findMember.isActivated()).isTrue();
+		assertThat(findMember.getAuthorities()).extracting("authorityName").containsExactly("ROLE_USER");
 	}
 
 }

@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.dreamcup.chatroom.entity.ChatRoom;
 import com.dreamcup.chatroom.service.ChatRoomService;
 import com.dreamcup.common.service.ChatService;
-import com.dreamcup.user.entity.Authority;
-import com.dreamcup.user.repository.AuthorityRepository;
+import com.dreamcup.member.entity.Authority;
+import com.dreamcup.member.repository.AuthorityRepository;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
