@@ -43,6 +43,6 @@ public class HomeController {
 			chatService.save("내용" + i, chatRoom);
 			chatService.save("내요옹" + i, chatRoom);
 		}
-	}
+		}
 	
 }
