@@ -12,12 +12,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.dreamcup.chatroom.service.ChatRoomService;
-import com.dreamcup.chatroom.entity.ChatRoom;
 import com.dreamcup.chatroom.dto.request.ChatRoomSaveRequestDto;
 import com.dreamcup.chatroom.dto.request.ChatRoomSearchRequestDto;
 import com.dreamcup.chatroom.dto.request.ChatRoomUpdateRequestDto;
 import com.dreamcup.chatroom.dto.response.ChatRoomResponseDto;
+import com.dreamcup.chatroom.entity.ChatRoom;
 import com.dreamcup.chatroom.exception.ChatRoomNotFoundException;
 import com.dreamcup.chatroom.repository.ChatRoomRepository;
 
