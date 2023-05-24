@@ -1,4 +1,4 @@
-package com.dreamcup.domain.common;
+package com.dreamcup.entity.common;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -15,7 +15,7 @@ import com.querydsl.core.types.Path;
 @Generated("com.querydsl.codegen.DefaultSupertypeSerializer")
 public class QBaseEntity extends EntityPathBase<BaseEntity> {
 
-    private static final long serialVersionUID = 28511603L;
+    private static final long serialVersionUID = -1875299630L;
 
     public static final QBaseEntity baseEntity = new QBaseEntity("baseEntity");
 

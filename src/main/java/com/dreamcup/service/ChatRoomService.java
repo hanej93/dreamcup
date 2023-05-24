@@ -1,10 +1,11 @@
 package com.dreamcup.service;
 
-import com.dreamcup.domain.ChatRoom;
+import com.dreamcup.entity.ChatRoom;
 import com.dreamcup.dto.request.ChatRoomSaveRequestDto;
 import com.dreamcup.dto.request.ChatRoomSearchRequestDto;
 import com.dreamcup.dto.request.ChatRoomUpdateRequestDto;
 import com.dreamcup.dto.response.ChatRoomResponseDto;
+import com.dreamcup.exception.ChatRoomNotFoundException;
 import com.dreamcup.repository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,13 +22,13 @@ public class ChatRoomService {
 
 	@Transactional
 	public Long save(ChatRoomSaveRequestDto requestDto) {
-		return chatRoomRepository.save(requestDto.toEntity()).getId();
+		return chatRoomRepository.save(requestDto.toEntity()).getChatRoomId();
 	}
 
 	@Transactional
 	public Long update(Long id, ChatRoomUpdateRequestDto requestDto) {
 		ChatRoom chatRoom = chatRoomRepository.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("채팅방을 찾을 수 없습니다. id=" + id));
+				.orElseThrow(ChatRoomNotFoundException::new);
 
 		chatRoom.update(requestDto.getTitle());
 
@@ -40,14 +41,14 @@ public class ChatRoomService {
 
 	public ChatRoomResponseDto findById(Long id) {
 		ChatRoom chatRoom = chatRoomRepository.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("채팅방을 찾을 수 없습니다. id=" + id));
+				.orElseThrow(ChatRoomNotFoundException::new);
 		return new ChatRoomResponseDto(chatRoom);
 	}
 
 	@Transactional
 	public void delete(Long id) {
 		ChatRoom chatRoom = chatRoomRepository.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("채팅방을 찾을 수 없습니다. id=" + id));
+				.orElseThrow();
 		chatRoomRepository.delete(chatRoom);
 	}
 

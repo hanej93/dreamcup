@@ -1,7 +1,7 @@
 package com.dreamcup.repository;
 
 import com.dreamcup.config.QueryDslConfig;
-import com.dreamcup.domain.ChatRoom;
+import com.dreamcup.entity.ChatRoom;
 import com.dreamcup.dto.request.ChatRoomSearchRequestDto;
 import com.dreamcup.dto.response.ChatRoomResponseDto;
 import jakarta.persistence.EntityManager;
@@ -43,7 +43,7 @@ class ChatRoomRepositoryTest {
         // expected
         chatRoomRepository.save(chatRoom);
 
-        ChatRoom findChatRoom = chatRoomRepository.findById(chatRoom.getId()).orElseThrow(() -> new IllegalArgumentException("조회할 수 없습니다."));
+        ChatRoom findChatRoom = chatRoomRepository.findById(chatRoom.getChatRoomId()).orElseThrow(() -> new IllegalArgumentException("조회할 수 없습니다."));
         assertThat(findChatRoom).isEqualTo(chatRoom);
 
         List<ChatRoom> chatRooms = chatRoomRepository.findAll();

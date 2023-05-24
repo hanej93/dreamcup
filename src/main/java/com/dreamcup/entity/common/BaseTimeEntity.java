@@ -1,4 +1,4 @@
-package com.dreamcup.domain.common;
+package com.dreamcup.entity.common;
 
 import java.time.LocalDateTime;
 

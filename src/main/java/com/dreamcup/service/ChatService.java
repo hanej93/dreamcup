@@ -3,8 +3,8 @@ package com.dreamcup.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.dreamcup.domain.Chat;
-import com.dreamcup.domain.ChatRoom;
+import com.dreamcup.entity.Chat;
+import com.dreamcup.entity.ChatRoom;
 import com.dreamcup.repository.ChatRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ public class ChatService {
 			.message(message)
 			.chatRoom(chatRoom)
 			.build();
-		return chatRepository.save(chat).getId();
+		return chatRepository.save(chat).getChatId();
 	}
 
 }

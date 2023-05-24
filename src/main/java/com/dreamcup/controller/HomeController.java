@@ -1,12 +1,10 @@
 package com.dreamcup.controller;
 
-import java.util.List;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.dreamcup.domain.ChatRoom;
+import com.dreamcup.entity.ChatRoom;
 import com.dreamcup.service.ChatRoomService;
 import com.dreamcup.service.ChatService;
 

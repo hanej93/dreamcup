@@ -12,11 +12,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.dreamcup.domain.ChatRoom;
+import com.dreamcup.entity.ChatRoom;
 import com.dreamcup.dto.request.ChatRoomSaveRequestDto;
 import com.dreamcup.dto.request.ChatRoomSearchRequestDto;
 import com.dreamcup.dto.request.ChatRoomUpdateRequestDto;
 import com.dreamcup.dto.response.ChatRoomResponseDto;
+import com.dreamcup.exception.ChatRoomNotFoundException;
 import com.dreamcup.repository.ChatRoomRepository;
 
 @SpringBootTest
@@ -78,7 +79,7 @@ class ChatRoomServiceTest {
 			.build();
 
 		// when
-		Long id = chatRoomService.update(chatRoom.getId(), request);
+		Long id = chatRoomService.update(chatRoom.getChatRoomId(), request);
 
 		// then
 		ChatRoom findChatRoom = chatRoomRepository.findById(id)
@@ -140,7 +141,7 @@ class ChatRoomServiceTest {
 		chatRoomRepository.save(chatRoom);
 
 		// when
-		ChatRoomResponseDto findChatRoom = chatRoomService.findById(chatRoom.getId());
+		ChatRoomResponseDto findChatRoom = chatRoomService.findById(chatRoom.getChatRoomId());
 
 		// then
 		assertThat(findChatRoom).extracting("title").isEqualTo("제목입니다.");
@@ -157,8 +158,8 @@ class ChatRoomServiceTest {
 		chatRoomRepository.save(chatRoom);
 
 		// expected
-		assertThatThrownBy(() -> chatRoomService.findById(chatRoom.getId() + 1))
-			.isInstanceOf(IllegalArgumentException.class);
+		assertThatThrownBy(() -> chatRoomService.findById(chatRoom.getChatRoomId() + 1))
+			.isInstanceOf(ChatRoomNotFoundException.class);
 	}
 
 	@Test
@@ -172,11 +173,11 @@ class ChatRoomServiceTest {
 		chatRoomRepository.save(chatRoom);
 
 		// when
-		chatRoomService.delete(chatRoom.getId());
+		chatRoomService.delete(chatRoom.getChatRoomId());
 
 		// then
-		assertThatThrownBy(() -> chatRoomService.findById(chatRoom.getId()))
-			.isInstanceOf(IllegalArgumentException.class);
+		assertThatThrownBy(() -> chatRoomService.findById(chatRoom.getChatRoomId()))
+			.isInstanceOf(ChatRoomNotFoundException.class);
 	}
 
 }

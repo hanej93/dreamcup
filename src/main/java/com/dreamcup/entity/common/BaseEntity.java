@@ -1,4 +1,4 @@
-package com.dreamcup.domain.common;
+package com.dreamcup.entity.common;
 
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;

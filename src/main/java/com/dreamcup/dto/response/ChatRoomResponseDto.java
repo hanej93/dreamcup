@@ -1,6 +1,6 @@
 package com.dreamcup.dto.response;
 
-import com.dreamcup.domain.ChatRoom;
+import com.dreamcup.entity.ChatRoom;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 

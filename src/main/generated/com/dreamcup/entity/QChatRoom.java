@@ -1,4 +1,4 @@
-package com.dreamcup.domain;
+package com.dreamcup.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -16,11 +16,13 @@ import com.querydsl.core.types.dsl.PathInits;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QChatRoom extends EntityPathBase<ChatRoom> {
 
-    private static final long serialVersionUID = 851653015L;
+    private static final long serialVersionUID = 1390327128L;
 
     public static final QChatRoom chatRoom = new QChatRoom("chatRoom");
 
-    public final com.dreamcup.domain.common.QBaseEntity _super = new com.dreamcup.domain.common.QBaseEntity(this);
+    public final com.dreamcup.entity.common.QBaseEntity _super = new com.dreamcup.entity.common.QBaseEntity(this);
+
+    public final NumberPath<Long> chatRoomId = createNumber("chatRoomId", Long.class);
 
     public final ListPath<Chat, QChat> chats = this.<Chat, QChat>createList("chats", Chat.class, QChat.class, PathInits.DIRECT2);
 
@@ -29,8 +31,6 @@ public class QChatRoom extends EntityPathBase<ChatRoom> {
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
-
-    public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final StringPath title = createString("title");
 

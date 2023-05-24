@@ -1,12 +1,9 @@
-package com.dreamcup.domain;
+package com.dreamcup.entity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.annotations.Cascade;
-
-import com.dreamcup.domain.common.BaseEntity;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.dreamcup.entity.common.BaseEntity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -25,14 +22,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChatRoom extends BaseEntity {
 
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "chat_room_id")
+	private Long chatRoomId;
 
-	@Column(length = 100, nullable = false)
+	@Column(name = "title", length = 100, nullable = false)
 	private String title;
 
 	@OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
-	@JsonIgnore
 	private List<Chat> chats = new ArrayList<>();
 
 	@Builder

@@ -1,6 +1,6 @@
-package com.dreamcup.domain;
+package com.dreamcup.entity;
 
-import com.dreamcup.domain.common.BaseEntity;
+import com.dreamcup.entity.common.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,14 +20,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Chat extends BaseEntity {
 
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@Id
+	@Column(name = "chat_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long chatId;
 
-	@Column(nullable = false)
+	@Column(name = "message", nullable = false)
 	private String message;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "room_id")
+	@JoinColumn(name = "chat_room_id")
 	private ChatRoom chatRoom;
 
 	@Builder

@@ -11,7 +11,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 
-import static com.dreamcup.domain.QChatRoom.chatRoom;
+import static com.dreamcup.entity.QChatRoom.chatRoom;
 
 @RequiredArgsConstructor
 public class ChatRoomRepositoryImpl implements ChatRoomRepositoryCustom {
@@ -27,7 +27,7 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepositoryCustom {
                 )
                 .limit(requestDto.getSize())
                 .offset(requestDto.getOffset())
-                .orderBy(chatRoom.id.desc())
+                .orderBy(chatRoom.chatRoomId.desc())
                 .fetch();
     }
 
