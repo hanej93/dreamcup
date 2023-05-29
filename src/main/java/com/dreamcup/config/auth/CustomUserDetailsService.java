@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -26,19 +26,22 @@ public class CustomUserDetailsService implements UserDetailsService {
 	@Override
 	@Transactional
 	public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-		return userRepository.findWithAuthoritiesByUsername(username)
-			.map(user -> createUser(username, user))
+		Member member = userRepository.findWithAuthoritiesByUsername(username)
 			.orElseThrow(() -> new UsernameNotFoundException(username + " -> 데이터베이스에서 찾을 수 없습니다."));
+
+		return toUserDetails(member);
 	}
 
-	private User createUser(String username, Member member) {
+	private User toUserDetails(Member member) {
 		if (!member.isActivated()) {
-			throw new RuntimeException(username + " -> 활성화되어 있지 않습니다.");
+			throw new RuntimeException(member.getUsername() + " -> 활성화되어 있지 않습니다.");
 		}
 
-		List<GrantedAuthority> grantedAuthorities = member.getAuthorities().stream()
-			.map(authority -> new SimpleGrantedAuthority(authority.getId().getAuthority().name()))
+		List<String> roles = member.getAuthorities().stream()
+			.map(auth -> auth.getId().getAuthority().name())
 			.collect(Collectors.toList());
+
+		List<GrantedAuthority> grantedAuthorities = AuthorityUtils.createAuthorityList(roles);
 
 		return new User(member.getUsername(), member.getPassword(), grantedAuthorities);
 	}
