@@ -18,6 +18,13 @@ public class HomeController {
 	private final ChatRoomService chatRoomService;
 	private final ChatService chatService;
 
+	@GetMapping("/")
+	@ResponseBody
+	public String index() {
+		return "home";
+	}
+
+
 	@GetMapping("/user")
 	@ResponseBody
 	public String user() {

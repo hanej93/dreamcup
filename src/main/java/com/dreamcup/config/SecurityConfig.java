@@ -21,7 +21,6 @@ import org.springframework.security.web.access.expression.WebExpressionAuthoriza
 @EnableWebSecurity
 public class SecurityConfig {
 
-
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
@@ -40,16 +39,15 @@ public class SecurityConfig {
 			.csrf(AbstractHttpConfigurer::disable)
 			.authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> {
 				authorizationManagerRequestMatcherRegistry
-					.requestMatchers("/api/login").permitAll()
-					.requestMatchers("/api/signup").permitAll()
+					.requestMatchers("/api/login", "/api/signup").permitAll()
 					.requestMatchers("/user").hasAnyRole("USER", "ADMIN")
 					.requestMatchers("/admin").access(new WebExpressionAuthorizationManager("hasRole('ADMIN')"))
 					.anyRequest().authenticated();
 			})
 			.formLogin(httpSecurityFormLoginConfigurer -> {
 				httpSecurityFormLoginConfigurer
-					.loginPage("/auth/login")
-					.loginProcessingUrl("/auth/login")
+					.loginPage("/api/login")
+					.loginProcessingUrl("/api/login")
 					.usernameParameter("username")
 					.passwordParameter("password")
 					.defaultSuccessUrl("/")
@@ -67,16 +65,18 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public UserDetailsService users() {
-		User.UserBuilder users = User.withDefaultPasswordEncoder();
-		UserDetails user = users
+	public UserDetailsService userDetailsService() {
+
+		String password = passwordEncoder().encode("1234");
+
+		UserDetails user = User.builder()
 			.username("user")
-			.password("1234")
+			.password(password)
 			.roles("USER")
 			.build();
-		UserDetails admin = users
+		UserDetails admin = User.builder()
 			.username("admin")
-			.password("1234")
+			.password(password)
 			.roles("USER", "ADMIN")
 			.build();
 		return new InMemoryUserDetailsManager(user, admin);
