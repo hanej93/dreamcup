@@ -52,7 +52,7 @@ class MemberServiceTest {
 		assertThat(findMember).extracting("username").isEqualTo("user");
 		assertThat(passwordEncoder.matches("1234", findMember.getPassword())).isTrue();
 		assertThat(findMember).extracting("nickname").isEqualTo("user-nick");
-		assertThat(findMember.getAuthorities()).extracting("id").extracting("authority").containsExactly(AuthorityEnum.ROLE_USER);
+		assertThat(findMember.getAuthorities()).extracting("authority").containsExactly(AuthorityEnum.ROLE_USER);
 	}
 
 	@Test

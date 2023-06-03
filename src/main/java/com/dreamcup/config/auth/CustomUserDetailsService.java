@@ -38,7 +38,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 		}
 
 		List<String> roles = member.getAuthorities().stream()
-			.map(auth -> auth.getId().getAuthority().name())
+			.map(auth -> auth.getAuthority().name())
 			.collect(Collectors.toList());
 
 		List<GrantedAuthority> grantedAuthorities = AuthorityUtils.createAuthorityList(roles);

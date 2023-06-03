@@ -36,7 +36,7 @@ public class Member {
 	@Column
 	private boolean activated;
 
-	@OneToMany(mappedBy = "id.member", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<MemberAuthority> authorities = new HashSet<>();
 
 	@Builder

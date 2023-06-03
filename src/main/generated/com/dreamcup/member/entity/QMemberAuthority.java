@@ -22,7 +22,9 @@ public class QMemberAuthority extends EntityPathBase<MemberAuthority> {
 
     public static final QMemberAuthority memberAuthority = new QMemberAuthority("memberAuthority");
 
-    public final QMemberAuthorityId id;
+    public final EnumPath<com.dreamcup.member.code.AuthorityEnum> authority = createEnum("authority", com.dreamcup.member.code.AuthorityEnum.class);
+
+    public final QMember member;
 
     public QMemberAuthority(String variable) {
         this(MemberAuthority.class, forVariable(variable), INITS);
@@ -42,7 +44,7 @@ public class QMemberAuthority extends EntityPathBase<MemberAuthority> {
 
     public QMemberAuthority(Class<? extends MemberAuthority> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.id = inits.isInitialized("id") ? new QMemberAuthorityId(forProperty("id"), inits.get("id")) : null;
+        this.member = inits.isInitialized("member") ? new QMember(forProperty("member")) : null;
     }
 
 }

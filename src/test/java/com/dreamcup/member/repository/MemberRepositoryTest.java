@@ -57,7 +57,7 @@ class MemberRepositoryTest {
 		assertThat(findMember).extracting("password").isEqualTo("1234");
 		assertThat(findMember).extracting("nickname").isEqualTo("user-nick");
 		assertThat(findMember.isActivated()).isTrue();
-		assertThat(findMember.getAuthorities()).extracting("id").extracting("authority").containsExactly(AuthorityEnum.ROLE_USER);
+		assertThat(findMember.getAuthorities()).extracting("authority").containsExactly(AuthorityEnum.ROLE_USER);
 	}
 
 }
