@@ -29,20 +29,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 		Member member = userRepository.findWithAuthoritiesByUsername(username)
 			.orElseThrow(() -> new UsernameNotFoundException(username + " -> 데이터베이스에서 찾을 수 없습니다."));
 
-		return toUserDetails(member);
+		return new LoginUser(member);
 	}
 
-	private User toUserDetails(Member member) {
-		if (!member.isActivated()) {
-			throw new RuntimeException(member.getUsername() + " -> 활성화되어 있지 않습니다.");
-		}
-
-		List<String> roles = member.getAuthorities().stream()
-			.map(auth -> auth.getAuthority().name())
-			.collect(Collectors.toList());
-
-		List<GrantedAuthority> grantedAuthorities = AuthorityUtils.createAuthorityList(roles);
-
-		return new User(member.getUsername(), member.getPassword(), grantedAuthorities);
-	}
 }

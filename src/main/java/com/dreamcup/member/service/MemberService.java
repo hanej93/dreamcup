@@ -34,7 +34,6 @@ public class MemberService {
 			.username(requestDto.getUsername())
 			.password(passwordEncoder.encode(requestDto.getPassword()))
 			.nickname(requestDto.getNickname())
-			.activated(true)
 			.build();
 
 		MemberAuthority memberAuthority = new MemberAuthority();
