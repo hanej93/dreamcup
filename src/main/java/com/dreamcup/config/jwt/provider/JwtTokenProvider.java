@@ -1,4 +1,4 @@
-package com.dreamcup.config.jwt;
+package com.dreamcup.config.jwt.provider;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -9,6 +9,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 
 import com.dreamcup.config.auth.LoginUser;
+import com.dreamcup.config.jwt.config.JwtConfigProperties;
 import com.dreamcup.member.code.AuthorityEnum;
 import com.dreamcup.member.entity.Member;
 import com.dreamcup.member.entity.MemberAuthority;

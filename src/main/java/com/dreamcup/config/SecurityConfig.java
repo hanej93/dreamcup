@@ -18,11 +18,11 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.dreamcup.config.jwt.JwtAccessDeniedHandler;
-import com.dreamcup.config.jwt.JwtAuthenticationEntryPoint;
-import com.dreamcup.config.jwt.JwtAuthenticationFilter;
-import com.dreamcup.config.jwt.JwtAuthorizationFilter;
-import com.dreamcup.config.jwt.JwtConfigProperties;
+import com.dreamcup.config.jwt.handler.JwtAccessDeniedHandler;
+import com.dreamcup.config.jwt.handler.JwtAuthenticationEntryPoint;
+import com.dreamcup.config.jwt.filter.JwtAuthenticationFilter;
+import com.dreamcup.config.jwt.filter.JwtAuthorizationFilter;
+import com.dreamcup.config.jwt.config.JwtConfigProperties;
 
 import lombok.RequiredArgsConstructor;
 
@@ -77,8 +77,6 @@ public class SecurityConfig {
 			})
 
 			.apply(new CustomSecurityFilterManager());
-
-
 
 		return http.build();
 	}

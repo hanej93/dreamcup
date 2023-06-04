@@ -1,7 +1,8 @@
-package com.dreamcup.config.jwt;
+package com.dreamcup.config.jwt.filter;
 
 import java.io.IOException;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -9,7 +10,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.dreamcup.config.auth.LoginRequestDto;
+import com.dreamcup.common.util.CustomResponseUtil;
+import com.dreamcup.config.jwt.config.JwtConfigProperties;
+import com.dreamcup.config.jwt.dto.LoginResponseDto;
+import com.dreamcup.config.jwt.provider.JwtTokenProvider;
+import com.dreamcup.config.jwt.dto.LoginRequestDto;
 import com.dreamcup.config.auth.LoginUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -52,16 +57,19 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
 		Authentication authResult) throws IOException, ServletException {
 		log.debug("JwtAuthenticationFilter.successfulAuthentication");
+
 		LoginUser loginUser = (LoginUser)authResult.getPrincipal();
 		String jwtToken = JwtTokenProvider.generateTokenWithPrefix(loginUser);
 		response.addHeader(JwtConfigProperties.HEADER, jwtToken);
-		// todo : 로그인 성공 응답
+		LoginResponseDto loginResponseDto = new LoginResponseDto(loginUser.getMember());
+		CustomResponseUtil.success(response, loginResponseDto);
 	}
 
 	@Override
 	protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
 		AuthenticationException failed) throws IOException, ServletException {
 		log.debug("JwtAuthenticationFilter.unsuccessfulAuthentication");
-		// todo: 로그인 실패 응답
+
+		CustomResponseUtil.fail(response, "Invalid Username or Password", HttpStatus.UNAUTHORIZED);
 	}
 }

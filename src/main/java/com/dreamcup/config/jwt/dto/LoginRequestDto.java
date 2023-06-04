@@ -1,4 +1,4 @@
-package com.dreamcup.config.auth;
+package com.dreamcup.config.jwt.dto;
 
 import lombok.Builder;
 import lombok.Getter;

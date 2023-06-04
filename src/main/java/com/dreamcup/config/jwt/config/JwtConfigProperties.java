@@ -1,4 +1,4 @@
-package com.dreamcup.config.jwt;
+package com.dreamcup.config.jwt.config;
 
 public interface JwtConfigProperties {
 

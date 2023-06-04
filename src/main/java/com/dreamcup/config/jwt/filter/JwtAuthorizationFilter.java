@@ -1,4 +1,4 @@
-package com.dreamcup.config.jwt;
+package com.dreamcup.config.jwt.filter;
 
 import java.io.IOException;
 
@@ -7,6 +7,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.util.StringUtils;
+
+import com.dreamcup.config.jwt.config.JwtConfigProperties;
+import com.dreamcup.config.jwt.provider.JwtTokenProvider;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

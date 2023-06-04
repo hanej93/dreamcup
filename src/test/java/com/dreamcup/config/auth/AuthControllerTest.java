@@ -1,6 +1,5 @@
 package com.dreamcup.config.auth;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -14,7 +13,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import com.dreamcup.config.jwt.JwtConfigProperties;
+import com.dreamcup.config.jwt.config.JwtConfigProperties;
+import com.dreamcup.config.jwt.dto.LoginRequestDto;
 import com.dreamcup.member.dto.request.MemberSignupRequestDto;
 import com.dreamcup.member.service.MemberService;
 import com.fasterxml.jackson.databind.ObjectMapper;
