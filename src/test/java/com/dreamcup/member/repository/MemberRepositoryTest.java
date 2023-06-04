@@ -40,7 +40,6 @@ class MemberRepositoryTest {
 			.username("user")
 			.password("1234")
 			.nickname("user-nick")
-			.activated(true)
 			.build();
 
 		MemberAuthority memberAuthority = new MemberAuthority();
@@ -56,7 +55,6 @@ class MemberRepositoryTest {
 		assertThat(findMember).extracting("username").isEqualTo("user");
 		assertThat(findMember).extracting("password").isEqualTo("1234");
 		assertThat(findMember).extracting("nickname").isEqualTo("user-nick");
-		assertThat(findMember.isActivated()).isTrue();
 		assertThat(findMember.getAuthorities()).extracting("authority").containsExactly(AuthorityEnum.ROLE_USER);
 	}
 

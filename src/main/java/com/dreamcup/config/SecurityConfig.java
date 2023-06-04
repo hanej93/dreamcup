@@ -4,22 +4,35 @@ import static org.springframework.boot.autoconfigure.security.servlet.PathReques
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import com.dreamcup.config.jwt.JwtAccessDeniedHandler;
+import com.dreamcup.config.jwt.JwtAuthenticationEntryPoint;
+import com.dreamcup.config.jwt.JwtAuthenticationFilter;
+import com.dreamcup.config.jwt.JwtAuthorizationFilter;
+import com.dreamcup.config.jwt.JwtConfigProperties;
+
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+	private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+	private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
@@ -36,7 +49,25 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
+			.headers(httpSecurityHeadersConfigurer ->
+				httpSecurityHeadersConfigurer
+					.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)
+			)
 			.csrf(AbstractHttpConfigurer::disable)
+			.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(configurationSource()))
+
+			.sessionManagement(httpSecuritySessionManagementConfigurer ->
+				httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			)
+
+			.formLogin(AbstractHttpConfigurer::disable)
+			.httpBasic(AbstractHttpConfigurer::disable)
+
+			.exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer
+				.authenticationEntryPoint(jwtAuthenticationEntryPoint)
+				.accessDeniedHandler(jwtAccessDeniedHandler)
+			)
+
 			.authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> {
 				authorizationManagerRequestMatcherRegistry
 					.requestMatchers("/api/login", "/api/signup").permitAll()
@@ -44,42 +75,35 @@ public class SecurityConfig {
 					.requestMatchers("/admin").access(new WebExpressionAuthorizationManager("hasRole('ADMIN')"))
 					.anyRequest().authenticated();
 			})
-			.formLogin(httpSecurityFormLoginConfigurer -> {
-				httpSecurityFormLoginConfigurer
-					.loginPage("/api/login")
-					.loginProcessingUrl("/api/login")
-					.usernameParameter("username")
-					.passwordParameter("password")
-					.defaultSuccessUrl("/")
-					.permitAll();
-			})
-			.logout(Customizer.withDefaults())
-			.rememberMe(httpSecurityRememberMeConfigurer -> {
-				httpSecurityRememberMeConfigurer
-					.rememberMeParameter("remember")
-					.alwaysRemember(false)
-					.tokenValiditySeconds(3600 * 24 * 30);
-			});
+
+			.apply(new CustomSecurityFilterManager());
+
+
 
 		return http.build();
 	}
 
-	@Bean
-	public UserDetailsService userDetailsService() {
+	public class CustomSecurityFilterManager extends
+		AbstractHttpConfigurer<CustomSecurityFilterManager, HttpSecurity> {
+		@Override
+		public void configure(HttpSecurity builder) throws Exception {
+			AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
+			builder.addFilter(new JwtAuthenticationFilter(authenticationManager));
+			builder.addFilter(new JwtAuthorizationFilter(authenticationManager));
+			super.configure(builder);
+		}
+	}
 
-		String password = passwordEncoder().encode("1234");
-
-		UserDetails user = User.builder()
-			.username("user")
-			.password(password)
-			.roles("USER")
-			.build();
-		UserDetails admin = User.builder()
-			.username("admin")
-			.password(password)
-			.roles("USER", "ADMIN")
-			.build();
-		return new InMemoryUserDetailsManager(user, admin);
+	public CorsConfigurationSource configurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration();
+		configuration.addAllowedHeader("*");
+		configuration.addAllowedMethod("*");
+		configuration.addAllowedOriginPattern("*");
+		configuration.setAllowCredentials(true);
+		configuration.addExposedHeader(JwtConfigProperties.HEADER);
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
 	}
 
 }

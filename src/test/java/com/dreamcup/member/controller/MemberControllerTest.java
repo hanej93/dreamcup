@@ -65,7 +65,6 @@ class MemberControllerTest {
 			.username("user")
 			.password("1234")
 			.nickname("user-nick2")
-			.activated(true)
 			.build();
 		memberRepository.save(member);
 

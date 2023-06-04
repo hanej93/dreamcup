@@ -1,7 +1,10 @@
 package com.dreamcup.member.entity;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+
+import com.dreamcup.member.code.AuthorityEnum;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -33,17 +36,20 @@ public class Member {
 	@Column(length = 50)
 	private String nickname;
 
-	@Column
-	private boolean activated;
-
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<MemberAuthority> authorities = new HashSet<>();
 
 	@Builder
-	public Member(String username, String password, String nickname, boolean activated) {
+	public Member(String username, String password, String nickname) {
 		this.username = username;
 		this.password = password;
 		this.nickname = nickname;
-		this.activated = activated;
 	}
+
+	public <T extends Collection<MemberAuthority>> void addMemberAuthorities(T authorities) {
+		for (MemberAuthority authority : authorities) {
+			this.authorities.add(authority);
+		}
+	}
+
 }

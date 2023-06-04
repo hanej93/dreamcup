@@ -24,3 +24,13 @@ spring:
     restart:
       enabled: false
     add-properties: true
+
+logging:
+  level:
+    com.dreamcup: debug
+
+jwt:
+  header: Authorization
+  # echo 'ej-jwt-secret-ej-jwt-secret-ej-jwt-secret-ej-jwt-secret-ej-jwt-secret-ej-jwt-secret-ej-jwt-secret'|base64
+  secret: ZWotand0LXNlY3JldC1lai1qd3Qtc2VjcmV0LWVqLWp3dC1zZWNyZXQtZWotand0LXNlY3JldC1lai1qd3Qtc2VjcmV0LWVqLWp3dC1zZWNyZXQtZWotand0LXNlY3JldA==
+  token-validity-in-seconds: 86400

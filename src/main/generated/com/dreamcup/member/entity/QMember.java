@@ -20,8 +20,6 @@ public class QMember extends EntityPathBase<Member> {
 
     public static final QMember member = new QMember("member1");
 
-    public final BooleanPath activated = createBoolean("activated");
-
     public final SetPath<MemberAuthority, QMemberAuthority> authorities = this.<MemberAuthority, QMemberAuthority>createSet("authorities", MemberAuthority.class, QMemberAuthority.class, PathInits.DIRECT2);
 
     public final NumberPath<Long> memberId = createNumber("memberId", Long.class);

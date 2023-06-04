@@ -1,5 +1,7 @@
 package com.dreamcup.member.service;
 
+import java.util.Arrays;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +36,6 @@ public class MemberService {
 			.username(requestDto.getUsername())
 			.password(passwordEncoder.encode(requestDto.getPassword()))
 			.nickname(requestDto.getNickname())
-			.activated(true)
 			.build();
 
 		MemberAuthority memberAuthority = new MemberAuthority();

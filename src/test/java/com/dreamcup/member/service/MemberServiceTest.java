@@ -63,7 +63,6 @@ class MemberServiceTest {
 			.username("user")
 			.password("1234")
 			.nickname("user-nick")
-			.activated(true)
 			.build();
 		memberRepository.save(member);
 
