@@ -70,7 +70,6 @@ class JwtAuthenticationFilterTest {
 				.content(request)
 			)
 			.andDo(print());
-		String responseBody = resultActions.andReturn().getResponse().getContentAsString();
 		String jwtToken = resultActions.andReturn().getResponse().getHeader(JwtConfigProperties.HEADER);
 
 	    // then
@@ -91,7 +90,7 @@ class JwtAuthenticationFilterTest {
 		String request = objectMapper.writeValueAsString(loginRequestDto);
 
 		// expected
-		ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/login")
+		mockMvc.perform(MockMvcRequestBuilders.post("/api/login")
 				.contentType(APPLICATION_JSON)
 				.content(request)
 			)
