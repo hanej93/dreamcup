@@ -47,7 +47,8 @@ class JwtTokenProviderTest {
 		memberAuthority.addMemberAuthority(member, AuthorityEnum.ROLE_USER);
 
 		LoginUser loginUser = new LoginUser(member);
-		String jwtToken = JwtTokenProvider.generateTokenWithPrefix(loginUser);
+		String bearerToken = JwtTokenProvider.generateTokenWithPrefix(loginUser);
+		String jwtToken = bearerToken.replace(JwtConfigProperties.TOKEN_PREFIX, "");
 
 		// when
 		boolean result = JwtTokenProvider.validateToken(jwtToken);
