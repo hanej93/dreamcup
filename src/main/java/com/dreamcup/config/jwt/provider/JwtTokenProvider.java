@@ -34,7 +34,7 @@ public class JwtTokenProvider {
 
 		String jwtToken = Jwts.builder()
 			.setHeaderParam(Header.TYPE, Header.JWT_TYPE)
-			.setSubject(String.valueOf(loginUser.getMember().getMemberId()))
+			.setSubject(loginUser.getMember().getUsername())
 			.setIssuedAt(new Date(System.currentTimeMillis()))
 			.setExpiration(new Date(System.currentTimeMillis() + JwtConfigProperties.EXPIRATION_TIME))
 			.signWith(SignatureAlgorithm.HS512, JwtConfigProperties.SECRET)
