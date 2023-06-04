@@ -12,10 +12,13 @@ import jakarta.persistence.IdClass;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
 @IdClass(MemberAuthorityId.class)
+@NoArgsConstructor
 public class MemberAuthority {
 
 	@Id
@@ -32,5 +35,9 @@ public class MemberAuthority {
 		this.authority = authorityEnum;
 
 		member.getAuthorities().add(this);
+	}
+
+	public MemberAuthority(AuthorityEnum authority) {
+		this.authority = authority;
 	}
 }

@@ -4,25 +4,25 @@ import static org.springframework.boot.autoconfigure.security.servlet.PathReques
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.dreamcup.config.jwt.JwtAccessDeniedHandler;
 import com.dreamcup.config.jwt.JwtAuthenticationEntryPoint;
-import com.dreamcup.config.jwt.JwtSecurityConfig;
-import com.dreamcup.config.jwt.JwtTokenProvider;
+import com.dreamcup.config.jwt.JwtAuthenticationFilter;
+import com.dreamcup.config.jwt.JwtAuthorizationFilter;
+import com.dreamcup.config.jwt.JwtConfigProperties;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,8 +31,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-	private final CorsFilter corsFilter;
-	private final JwtTokenProvider jwtTokenProvider;
 	private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 	private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
@@ -51,14 +49,19 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
-			.csrf(csrf -> csrf.disable())
-			.addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
+			.headers(httpSecurityHeadersConfigurer ->
+				httpSecurityHeadersConfigurer
+					.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)
+			)
+			.csrf(AbstractHttpConfigurer::disable)
+			.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(configurationSource()))
 
 			.sessionManagement(httpSecuritySessionManagementConfigurer ->
 				httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			)
 
-			.formLogin(httpSecurityFormLoginConfigurer -> httpSecurityFormLoginConfigurer.disable())
+			.formLogin(AbstractHttpConfigurer::disable)
+			.httpBasic(AbstractHttpConfigurer::disable)
 
 			.exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer
 				.authenticationEntryPoint(jwtAuthenticationEntryPoint)
@@ -73,9 +76,34 @@ public class SecurityConfig {
 					.anyRequest().authenticated();
 			})
 
-			.apply(new JwtSecurityConfig(jwtTokenProvider));
+			.apply(new CustomSecurityFilterManager());
+
+
 
 		return http.build();
+	}
+
+	public class CustomSecurityFilterManager extends
+		AbstractHttpConfigurer<CustomSecurityFilterManager, HttpSecurity> {
+		@Override
+		public void configure(HttpSecurity builder) throws Exception {
+			AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
+			builder.addFilter(new JwtAuthenticationFilter(authenticationManager));
+			builder.addFilter(new JwtAuthorizationFilter(authenticationManager));
+			super.configure(builder);
+		}
+	}
+
+	public CorsConfigurationSource configurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration();
+		configuration.addAllowedHeader("*");
+		configuration.addAllowedMethod("*");
+		configuration.addAllowedOriginPattern("*");
+		configuration.setAllowCredentials(true);
+		configuration.addExposedHeader(JwtConfigProperties.HEADER);
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
 	}
 
 }

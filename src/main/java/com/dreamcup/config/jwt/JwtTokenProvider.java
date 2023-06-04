@@ -1,84 +1,50 @@
 package com.dreamcup.config.jwt;
 
-import java.security.Key;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.stereotype.Component;
+
+import com.dreamcup.config.auth.LoginUser;
+import com.dreamcup.member.code.AuthorityEnum;
+import com.dreamcup.member.entity.Member;
+import com.dreamcup.member.entity.MemberAuthority;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Component
 public class JwtTokenProvider {
 
-	private static final String AUTHORITIES_KEY = "auth";
-	private final String secret;
-	private final long tokenValidityInMilliseconds;
-	private Key key;
+	public static final String AUTHORITIES_KEY = "auth";
 
-	public JwtTokenProvider(
-		@Value("${jwt.secret}") String secret,
-		@Value("${jwt.token-validity-in-seconds}") long tokenValidityInMilliseconds
-	) {
-		this.secret = secret;
-		this.tokenValidityInMilliseconds = tokenValidityInMilliseconds;
+	public static String generateTokenWithPrefix(LoginUser loginUser) {
 
-		byte[] keyBytes = Decoders.BASE64.decode(secret);
-		this.key = Keys.hmacShaKeyFor(keyBytes);
-	}
+		String authorities = getMemberAuthorities(loginUser);
 
-	public String createToken(Authentication authentication) {
-		String authorities = authentication.getAuthorities().stream()
-			.map(GrantedAuthority::getAuthority)
-			.collect(Collectors.joining(","));
-
-		long now = (new Date()).getTime();
-		Date validity = new Date(now + this.tokenValidityInMilliseconds);
-
-		return Jwts.builder()
-			.setSubject(authentication.getName())
+		String jwtToken = Jwts.builder()
+			.setHeaderParam(Header.TYPE, Header.JWT_TYPE)
+			.setSubject(String.valueOf(loginUser.getMember().getMemberId()))
+			.setIssuedAt(new Date(System.currentTimeMillis()))
+			.setExpiration(new Date(System.currentTimeMillis() + JwtConfigProperties.EXPIRATION_TIME))
+			.signWith(SignatureAlgorithm.HS512, JwtConfigProperties.SECRET)
 			.claim(AUTHORITIES_KEY, authorities)
-			.signWith(key, SignatureAlgorithm.HS512)
-			.setExpiration(validity)
 			.compact();
+		return JwtConfigProperties.TOKEN_PREFIX + jwtToken;
 	}
 
-	public Authentication getAuthentication(String token) {
-		Claims claims = Jwts.parserBuilder()
-			.setSigningKey(key)
-			.build()
-			.parseClaimsJws(token).getBody();
-
-		Collection<? extends GrantedAuthority> authorities = Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-			.map(SimpleGrantedAuthority::new)
-			.collect(Collectors.toList());
-
-		User principal = new User(claims.getSubject(), "", authorities);
-
-		return new UsernamePasswordAuthenticationToken(principal, token, authorities);
-	}
-
-	public boolean validateToken(String token) {
+	public static boolean validateToken(String token) {
 		try {
-			Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+			Jwts.parserBuilder().setSigningKey(JwtConfigProperties.SECRET).build().parseClaimsJws(token);
 			return true;
 		} catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
 			log.error("잘못된 JWT 서명입니다.");
@@ -90,6 +56,39 @@ public class JwtTokenProvider {
 			log.error("JWT 토큰이 잘못되었습니다.");
 		}
 		return false;
+	}
+
+	public static Authentication getAuthentication(String token) {
+		Claims claims = Jwts.parser()
+			.setSigningKey(JwtConfigProperties.SECRET)
+			.parseClaimsJws(token).getBody();
+
+		String username = claims.getSubject();
+		String[] authorities = claims.get(AUTHORITIES_KEY).toString().split(",");
+
+		LoginUser loginUser = getLoginUser(username, authorities);
+
+		return new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
+	}
+
+	private static LoginUser getLoginUser(String username, String[] splitAuthority) {
+		Set<MemberAuthority> memberAuthorities = Arrays.stream(splitAuthority)
+			.map(auth -> new MemberAuthority(AuthorityEnum.valueOf(auth)))
+			.collect(Collectors.toSet());
+
+		Member member = Member.builder()
+			.username(username)
+			.build();
+		member.addMemberAuthorities(memberAuthorities);
+
+		LoginUser loginUser = new LoginUser(member);
+		return loginUser;
+	}
+
+	private static String getMemberAuthorities(LoginUser loginUser) {
+		return loginUser.getAuthorities().stream()
+			.map(auth -> auth.getAuthority())
+			.collect(Collectors.joining(","));
 	}
 
 }

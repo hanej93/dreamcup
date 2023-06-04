@@ -10,8 +10,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.dreamcup.member.entity.Member;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+@Getter
 @RequiredArgsConstructor
 public class LoginUser implements UserDetails {
 

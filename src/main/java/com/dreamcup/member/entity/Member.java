@@ -1,7 +1,10 @@
 package com.dreamcup.member.entity;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+
+import com.dreamcup.member.code.AuthorityEnum;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -42,4 +45,11 @@ public class Member {
 		this.password = password;
 		this.nickname = nickname;
 	}
+
+	public <T extends Collection<MemberAuthority>> void addMemberAuthorities(T authorities) {
+		for (MemberAuthority authority : authorities) {
+			this.authorities.add(authority);
+		}
+	}
+
 }
