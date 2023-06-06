@@ -25,6 +25,12 @@ spring:
       enabled: false
     add-properties: true
 
+  rabbitmq:
+    username: guest
+    password: guest
+    host: localhost
+    port: 5672
+
 logging:
   level:
     com.dreamcup: debug

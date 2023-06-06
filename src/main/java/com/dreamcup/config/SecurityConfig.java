@@ -70,7 +70,8 @@ public class SecurityConfig {
 
 			.authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> {
 				authorizationManagerRequestMatcherRegistry
-					.requestMatchers("/api/login", "/api/signup").permitAll()
+					.requestMatchers("/ws/**").permitAll()
+					.requestMatchers("/api/login", "/api/signup", "/").permitAll()
 					.requestMatchers("/user").hasAnyRole("USER", "ADMIN")
 					.requestMatchers("/admin").access(new WebExpressionAuthorizationManager("hasRole('ADMIN')"))
 					.anyRequest().authenticated();
