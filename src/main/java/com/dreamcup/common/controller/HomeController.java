@@ -22,7 +22,6 @@ public class HomeController {
 	private final MemberService memberService;
 
 	@GetMapping("/")
-	@ResponseBody
 	public String index() {
 		return "home";
 	}
