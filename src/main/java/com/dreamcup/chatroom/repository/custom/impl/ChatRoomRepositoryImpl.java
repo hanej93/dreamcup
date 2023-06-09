@@ -1,7 +1,6 @@
 package com.dreamcup.chatroom.repository.custom.impl;
 
 import static com.dreamcup.chatroom.entity.QChatRoom.*;
-import static com.dreamcup.member.entity.QParticipant.*;
 
 import java.util.List;
 
@@ -15,10 +14,8 @@ import com.dreamcup.chatroom.dto.request.ChatRoomSearchRequestDto;
 import com.dreamcup.chatroom.dto.response.ChatRoomResponseDto;
 import com.dreamcup.chatroom.dto.response.QChatRoomResponseDto;
 import com.dreamcup.chatroom.repository.custom.ChatRoomRepositoryCustom;
-import com.querydsl.core.types.ExpressionException;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;

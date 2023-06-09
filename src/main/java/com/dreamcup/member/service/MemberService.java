@@ -1,15 +1,12 @@
 package com.dreamcup.member.service;
 
-import java.util.Arrays;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.dreamcup.member.code.AuthorityEnum;
 import com.dreamcup.member.dto.request.MemberSignupRequestDto;
 import com.dreamcup.member.entity.Member;
-import com.dreamcup.member.entity.MemberAuthority;
-import com.dreamcup.member.code.AuthorityEnum;
 import com.dreamcup.member.exception.DuplicateMemberException;
 import com.dreamcup.member.repository.MemberRepository;
 
