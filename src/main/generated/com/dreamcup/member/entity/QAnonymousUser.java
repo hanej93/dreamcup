@@ -24,9 +24,6 @@ public class QAnonymousUser extends EntityPathBase<AnonymousUser> {
     public final BooleanPath anonymous = createBoolean("anonymous");
 
     //inherited
-    public final ListPath<com.dreamcup.chatroom.entity.ChatRoomParticipants, com.dreamcup.chatroom.entity.QChatRoomParticipants> chatRoomParticipants = _super.chatRoomParticipants;
-
-    //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
     //inherited

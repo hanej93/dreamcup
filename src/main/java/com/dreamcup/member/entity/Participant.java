@@ -38,9 +38,6 @@ public abstract class Participant extends BaseTimeEntity {
 
 	private String nameTag;
 
-	@OneToMany(mappedBy = "participant", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<ChatRoomParticipants> chatRoomParticipants = new ArrayList<>();
-
 	public abstract boolean isAnonymous();
 
 	protected Participant(String nickName, String nameTag) {

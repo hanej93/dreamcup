@@ -63,12 +63,10 @@ public class ChatRoom extends BaseTimeEntity {
 	public void addParticipant(Participant participant) {
 		ChatRoomParticipants chatRoomParticipants = new ChatRoomParticipants(this, participant);
 		participants.add(chatRoomParticipants);
-		participant.getChatRoomParticipants().add(chatRoomParticipants);
 	}
 
 	public void removeParticipant(Participant participant) {
 		ChatRoomParticipants chatRoomParticipants = new ChatRoomParticipants(this, participant);
-		participant.getChatRoomParticipants().remove(chatRoomParticipants);
 		participants.remove(chatRoomParticipants);
 		chatRoomParticipants.clearChatRoomAndParticipant();
 	}

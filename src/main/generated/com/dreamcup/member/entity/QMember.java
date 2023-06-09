@@ -25,9 +25,6 @@ public class QMember extends EntityPathBase<Member> {
     public final SetPath<MemberAuthority, QMemberAuthority> authorities = this.<MemberAuthority, QMemberAuthority>createSet("authorities", MemberAuthority.class, QMemberAuthority.class, PathInits.DIRECT2);
 
     //inherited
-    public final ListPath<com.dreamcup.chatroom.entity.ChatRoomParticipants, com.dreamcup.chatroom.entity.QChatRoomParticipants> chatRoomParticipants = _super.chatRoomParticipants;
-
-    //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
     //inherited

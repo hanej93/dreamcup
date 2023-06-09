@@ -10,9 +10,9 @@ import com.dreamcup.chatroom.repository.ChatRepository;
 import com.dreamcup.chatroom.repository.ChatRoomRepository;
 import com.dreamcup.chatroom.vo.ChatVo;
 import com.dreamcup.config.RabbitMqConfig;
-import com.dreamcup.member.entity.Member;
+import com.dreamcup.member.entity.Participant;
 import com.dreamcup.member.exception.MemberNotFoundException;
-import com.dreamcup.member.repository.MemberRepository;
+import com.dreamcup.member.repository.ParticipantRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,10 +24,10 @@ public class ChatService {
 	private final RabbitTemplate rabbitTemplate;
 	private final ChatRepository chatRepository;
 	private final ChatRoomRepository chatRoomRepository;
-	private final MemberRepository memberRepository;
+	private final ParticipantRepository participantRepository;
 
 	@Transactional
-	public void sendMessage(ChatVo chatVo) {
+	public void sendChatMessage(ChatVo chatVo) {
 		save(chatVo);
 		rabbitTemplate.convertAndSend(RabbitMqConfig.CHAT_EXCHANGE_NAME, "message." + chatVo.getChatRoomId(), chatVo);
 	}
@@ -37,11 +37,8 @@ public class ChatService {
 		ChatRoom chatRoom = chatRoomRepository.findById(chatVo.getChatRoomId())
 			.orElseThrow(() -> new IllegalArgumentException()); // todo : ChatRoomNotFoundException
 
-		Member sender = null;
-		if (chatVo.getSenderId() != null) {
-			sender = memberRepository.findById(chatVo.getSenderId())
-				.orElseThrow(MemberNotFoundException::new);
-		}
+		Participant sender = participantRepository.findById(chatVo.getSenderId())
+			.orElseThrow(MemberNotFoundException::new);
 
 		Chat chat = Chat.builder()
 			.message(chatVo.getMessage())

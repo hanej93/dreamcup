@@ -19,7 +19,7 @@ public class WebSocketController {
 	@MessageMapping("/message")
 	public void sendMessage(ChatVo chatVo) {
 		log.debug("WebSocketController.sendMessage : {}", chatVo);
-		chatService.sendMessage(chatVo);
+		chatService.sendChatMessage(chatVo);
 	}
 
 }

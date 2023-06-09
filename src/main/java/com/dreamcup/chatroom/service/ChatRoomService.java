@@ -55,6 +55,7 @@ public class ChatRoomService {
 			.messageType(MessageType.SYSTEM)
 			.senderId(null)
 			.build();
+
 		// chatService.sendMessage(chatVo);
 		chatService.save(chatVo);
 
@@ -62,20 +63,18 @@ public class ChatRoomService {
 	}
 
 	private ChatRoom convertToChatRoomEntity(ChatRoomSaveRequestDto requestDto) {
-		ChatRoom.ChatRoomBuilder chatRoomBuilder = ChatRoom.builder()
-			.title(requestDto.getTitle())
-			.maxUserCount(requestDto.getUserMaxCount());
-
-		if (hasText(requestDto.getRawPassword())) {
-			chatRoomBuilder.password(passwordEncoder.encode(requestDto.getRawPassword()));
-		}
-
 		Participant participant = participantRepository.findById(requestDto.getCreator())
 			.orElseThrow(MemberNotFoundException::new);
 
-		chatRoomBuilder.creator(participant);
+		String encryptedPassword =
+			requestDto.getRawPassword() == null ? null : passwordEncoder.encode(requestDto.getRawPassword());
 
-		ChatRoom chatRoom = chatRoomBuilder.build();
+		ChatRoom chatRoom = ChatRoom.builder()
+			.title(requestDto.getTitle())
+			.creator(participant)
+			.maxUserCount(requestDto.getUserMaxCount())
+			.password(encryptedPassword)
+			.build();
 
 		chatRoom.addParticipant(participant);
 
