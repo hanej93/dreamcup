@@ -17,15 +17,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChatRoom extends BaseTimeEntity {
 
@@ -37,20 +34,23 @@ public class ChatRoom extends BaseTimeEntity {
 	private String title;
 
 	@Column(nullable = false)
-	private String roomPassword;
+	private String password;
 
 	@Column(nullable = false)
 	private Integer maxUserCount;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "participant_id")
-	private Participant participant;
+	private Participant creator;
 
-	// todo: template
-	// private List<DreamCupTemplate> = new ArrayList<>();
+	@OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Participant> participants = new ArrayList<>();
 
 	@OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
 	private List<Chat> chats = new ArrayList<>();
+
+	// todo: template
+	// private List<DreamCupTemplate> = new ArrayList<>();
 
 	public ChatRoom(String title) {
 		this.title = title;
@@ -61,10 +61,10 @@ public class ChatRoom extends BaseTimeEntity {
 	}
 
 	@Builder
-	public ChatRoom(String title, String roomPassword, Integer maxUserCount, Participant participant) {
+	public ChatRoom(String title, String password, Integer maxUserCount, Participant creator) {
 		this.title = title;
-		this.roomPassword = roomPassword;
+		this.password = password;
 		this.maxUserCount = maxUserCount;
-		this.participant = participant;
+		this.creator = creator;
 	}
 }

@@ -30,14 +30,9 @@ public class MemberAuthority {
 	@Enumerated(EnumType.STRING)
 	private AuthorityEnum authority;
 
-	public void addMemberAuthority(Member member, AuthorityEnum authorityEnum) {
+	public MemberAuthority(Member member, AuthorityEnum authority) {
 		this.member = member;
-		this.authority = authorityEnum;
-
-		member.getAuthorities().add(this);
-	}
-
-	public MemberAuthority(AuthorityEnum authority) {
 		this.authority = authority;
 	}
+
 }

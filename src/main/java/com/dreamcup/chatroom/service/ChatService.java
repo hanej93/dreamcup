@@ -45,7 +45,7 @@ public class ChatService {
 
 		Chat chat = Chat.builder()
 			.message(chatVo.getMessage())
-			// .sender(sender)
+			.sender(sender)
 			.chatRoom(chatRoom)
 			.messageType(chatVo.getMessageType())
 			.build();

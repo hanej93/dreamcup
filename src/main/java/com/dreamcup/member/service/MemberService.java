@@ -38,8 +38,8 @@ public class MemberService {
 			.nickName(requestDto.getNickname())
 			.build();
 
-		MemberAuthority memberAuthority = new MemberAuthority();
-		memberAuthority.addMemberAuthority(member, AuthorityEnum.ROLE_USER);
+		MemberAuthority memberAuthority = new MemberAuthority(member, AuthorityEnum.ROLE_USER);
+		member.addMemberAuthorities(memberAuthority);
 
 		memberRepository.save(member);
 

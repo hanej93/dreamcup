@@ -1,7 +1,5 @@
 package com.dreamcup.chatroom.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +16,6 @@ public class ChatRoomSaveRequestDto {
     private String title;
 	private String rawPassword;
 	private Integer userMaxCount;
-	private Long memberId;
-	private String creatorName;
+	private Long creator;
 
 }

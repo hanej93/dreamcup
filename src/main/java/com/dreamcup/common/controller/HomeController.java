@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dreamcup.chatroom.dto.request.ChatRoomSaveRequestDto;
-import com.dreamcup.chatroom.entity.ChatRoom;
 import com.dreamcup.chatroom.service.ChatRoomService;
 import com.dreamcup.chatroom.service.ChatService;
 import com.dreamcup.member.dto.request.MemberSignupRequestDto;
@@ -62,7 +61,7 @@ public class HomeController {
 			// chatService.save("내요옹" + i, chatRoom);
 
 			ChatRoomSaveRequestDto chatRoomSaveRequestDto = ChatRoomSaveRequestDto.builder()
-				.memberId(1L)
+				.creator(1L)
 				.rawPassword(String.valueOf(i))
 				.title("제목" + i)
 				.userMaxCount((i % 8) + 1)

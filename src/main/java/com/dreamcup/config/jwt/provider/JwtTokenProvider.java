@@ -73,13 +73,14 @@ public class JwtTokenProvider {
 	}
 
 	private static LoginUser getLoginUser(String username, String[] splitAuthority) {
-		Set<MemberAuthority> memberAuthorities = Arrays.stream(splitAuthority)
-			.map(auth -> new MemberAuthority(AuthorityEnum.valueOf(auth)))
-			.collect(Collectors.toSet());
-
 		Member member = Member.builder()
 			.username(username)
 			.build();
+
+		Set<MemberAuthority> memberAuthorities = Arrays.stream(splitAuthority)
+			.map(auth -> new MemberAuthority(member, AuthorityEnum.valueOf(auth)))
+			.collect(Collectors.toSet());
+
 		member.addMemberAuthorities(memberAuthorities);
 
 		LoginUser loginUser = new LoginUser(member);

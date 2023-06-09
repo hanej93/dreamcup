@@ -18,41 +18,61 @@ public class QMember extends EntityPathBase<Member> {
 
     private static final long serialVersionUID = -2045849641L;
 
+    private static final PathInits INITS = PathInits.DIRECT2;
+
     public static final QMember member = new QMember("member1");
 
-    public final QParticipant _super = new QParticipant(this);
+    public final QParticipant _super;
 
     public final SetPath<MemberAuthority, QMemberAuthority> authorities = this.<MemberAuthority, QMemberAuthority>createSet("authorities", MemberAuthority.class, QMemberAuthority.class, PathInits.DIRECT2);
 
-    //inherited
-    public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
+    // inherited
+    public final com.dreamcup.chatroom.entity.QChatRoom chatRoom;
 
     //inherited
-    public final NumberPath<Long> id = _super.id;
+    public final DateTimePath<java.time.LocalDateTime> createdDate;
 
     //inherited
-    public final StringPath nameTag = _super.nameTag;
+    public final NumberPath<Long> id;
 
     //inherited
-    public final StringPath nickName = _super.nickName;
+    public final StringPath nameTag;
+
+    //inherited
+    public final StringPath nickName;
 
     public final StringPath password = createString("password");
 
     //inherited
-    public final DateTimePath<java.time.LocalDateTime> updatedDate = _super.updatedDate;
+    public final DateTimePath<java.time.LocalDateTime> updatedDate;
 
     public final StringPath username = createString("username");
 
     public QMember(String variable) {
-        super(Member.class, forVariable(variable));
+        this(Member.class, forVariable(variable), INITS);
     }
 
     public QMember(Path<? extends Member> path) {
-        super(path.getType(), path.getMetadata());
+        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
     public QMember(PathMetadata metadata) {
-        super(Member.class, metadata);
+        this(metadata, PathInits.getFor(metadata, INITS));
+    }
+
+    public QMember(PathMetadata metadata, PathInits inits) {
+        this(Member.class, metadata, inits);
+    }
+
+    public QMember(Class<? extends Member> type, PathMetadata metadata, PathInits inits) {
+        super(type, metadata, inits);
+        this._super = new QParticipant(type, metadata, inits);
+        this.chatRoom = _super.chatRoom;
+        this.createdDate = _super.createdDate;
+        this.id = _super.id;
+        this.nameTag = _super.nameTag;
+        this.nickName = _super.nickName;
+        this.updatedDate = _super.updatedDate;
     }
 
 }

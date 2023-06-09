@@ -1,10 +1,7 @@
 package com.dreamcup.chatroom.entity;
 
 import com.dreamcup.chatroom.code.MessageType;
-import com.dreamcup.chatroom.entity.ChatRoom;
-import com.dreamcup.common.entity.common.BaseEntity;
 import com.dreamcup.common.entity.common.BaseTimeEntity;
-import com.dreamcup.member.entity.Member;
 import com.dreamcup.member.entity.Participant;
 
 import jakarta.persistence.Column;

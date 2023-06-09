@@ -9,8 +9,27 @@ import java.time.LocalDateTime;
 @Getter
 public class ChatRoomResponseDto {
 
+    private Long chatRoomId;
     private String title;
+    private Integer maxUserCount;
+    private Integer currentUserCount;
     private LocalDateTime updatedDate;
+
+    // todo:
+    // chatRoomId
+    // maxUserCount
+    // currentUserCount
+    // ....
+
+    @QueryProjection
+    public ChatRoomResponseDto(Long chatRoomId, String title, Integer maxUserCount, Integer currentUserCount,
+        LocalDateTime updatedDate) {
+        this.chatRoomId = chatRoomId;
+        this.title = title;
+        this.maxUserCount = maxUserCount;
+        this.currentUserCount = currentUserCount;
+        this.updatedDate = updatedDate;
+    }
 
     @QueryProjection
     public ChatRoomResponseDto(String title, LocalDateTime updatedDate) {

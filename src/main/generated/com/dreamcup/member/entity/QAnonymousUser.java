@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -17,37 +18,57 @@ public class QAnonymousUser extends EntityPathBase<AnonymousUser> {
 
     private static final long serialVersionUID = 2144772603L;
 
+    private static final PathInits INITS = PathInits.DIRECT2;
+
     public static final QAnonymousUser anonymousUser = new QAnonymousUser("anonymousUser");
 
-    public final QParticipant _super = new QParticipant(this);
+    public final QParticipant _super;
 
     public final BooleanPath anonymous = createBoolean("anonymous");
 
-    //inherited
-    public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
+    // inherited
+    public final com.dreamcup.chatroom.entity.QChatRoom chatRoom;
 
     //inherited
-    public final NumberPath<Long> id = _super.id;
+    public final DateTimePath<java.time.LocalDateTime> createdDate;
 
     //inherited
-    public final StringPath nameTag = _super.nameTag;
+    public final NumberPath<Long> id;
 
     //inherited
-    public final StringPath nickName = _super.nickName;
+    public final StringPath nameTag;
 
     //inherited
-    public final DateTimePath<java.time.LocalDateTime> updatedDate = _super.updatedDate;
+    public final StringPath nickName;
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> updatedDate;
 
     public QAnonymousUser(String variable) {
-        super(AnonymousUser.class, forVariable(variable));
+        this(AnonymousUser.class, forVariable(variable), INITS);
     }
 
     public QAnonymousUser(Path<? extends AnonymousUser> path) {
-        super(path.getType(), path.getMetadata());
+        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
     public QAnonymousUser(PathMetadata metadata) {
-        super(AnonymousUser.class, metadata);
+        this(metadata, PathInits.getFor(metadata, INITS));
+    }
+
+    public QAnonymousUser(PathMetadata metadata, PathInits inits) {
+        this(AnonymousUser.class, metadata, inits);
+    }
+
+    public QAnonymousUser(Class<? extends AnonymousUser> type, PathMetadata metadata, PathInits inits) {
+        super(type, metadata, inits);
+        this._super = new QParticipant(type, metadata, inits);
+        this.chatRoom = _super.chatRoom;
+        this.createdDate = _super.createdDate;
+        this.id = _super.id;
+        this.nameTag = _super.nameTag;
+        this.nickName = _super.nickName;
+        this.updatedDate = _super.updatedDate;
     }
 
 }

@@ -31,11 +31,13 @@ public class QChatRoom extends EntityPathBase<ChatRoom> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
+    public final com.dreamcup.member.entity.QParticipant creator;
+
     public final NumberPath<Integer> maxUserCount = createNumber("maxUserCount", Integer.class);
 
-    public final com.dreamcup.member.entity.QParticipant participant;
+    public final ListPath<com.dreamcup.member.entity.Participant, com.dreamcup.member.entity.QParticipant> participants = this.<com.dreamcup.member.entity.Participant, com.dreamcup.member.entity.QParticipant>createList("participants", com.dreamcup.member.entity.Participant.class, com.dreamcup.member.entity.QParticipant.class, PathInits.DIRECT2);
 
-    public final StringPath roomPassword = createString("roomPassword");
+    public final StringPath password = createString("password");
 
     public final StringPath title = createString("title");
 
@@ -60,7 +62,7 @@ public class QChatRoom extends EntityPathBase<ChatRoom> {
 
     public QChatRoom(Class<? extends ChatRoom> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.participant = inits.isInitialized("participant") ? new com.dreamcup.member.entity.QParticipant(forProperty("participant")) : null;
+        this.creator = inits.isInitialized("creator") ? new com.dreamcup.member.entity.QParticipant(forProperty("creator"), inits.get("creator")) : null;
     }
 
 }

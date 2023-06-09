@@ -17,9 +17,10 @@ import com.dreamcup.chatroom.entity.ChatRoom;
 import com.dreamcup.chatroom.exception.ChatRoomNotFoundException;
 import com.dreamcup.chatroom.repository.ChatRoomRepository;
 import com.dreamcup.chatroom.vo.ChatVo;
-import com.dreamcup.member.entity.Member;
+import com.dreamcup.member.entity.Participant;
 import com.dreamcup.member.exception.MemberNotFoundException;
 import com.dreamcup.member.repository.MemberRepository;
+import com.dreamcup.member.repository.ParticipantRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,10 +32,18 @@ public class ChatRoomService {
 	private final PasswordEncoder passwordEncoder;
 	private final ChatService chatService;
 	private final ChatRoomRepository chatRoomRepository;
-	private final MemberRepository memberRepository;
+	private final ParticipantRepository participantRepository;
 
 	@Transactional
 	public Long createChatRoom(ChatRoomSaveRequestDto requestDto) {
+		/**
+		 * todo: 채팅방 생성 로직
+		 * 1. 채팅방 생성
+		 * 2. 채팅방 참여
+		 * -> 채팅방 입장 후 시스템 생성 메시지?
+		 * 3. 시스템 채팅 메시지 발송
+		 */
+
 		ChatRoom chatRoom = convertToChatRoomEntity(requestDto);
 
 		chatRoomRepository.save(chatRoom);
@@ -43,7 +52,7 @@ public class ChatRoomService {
 			.chatRoomId(chatRoom.getChatRoomId())
 			.message("채팅방이 생성되었습니다.") // todo: change constraint
 			.messageType(MessageType.SYSTEM)
-			.senderId(null) // todo: systemUser 추가 필요
+			.senderId(null)
 			.build();
 		// chatService.sendMessage(chatVo);
 		chatService.save(chatVo);
@@ -57,18 +66,14 @@ public class ChatRoomService {
 			.maxUserCount(requestDto.getUserMaxCount());
 
 		if (hasText(requestDto.getRawPassword())) {
-			chatRoomBuilder.roomPassword(passwordEncoder.encode(requestDto.getRawPassword()));
+			chatRoomBuilder.password(passwordEncoder.encode(requestDto.getRawPassword()));
 		}
 
-		Long memberId = requestDto.getMemberId();
-		// if (memberId != null) {
-		// 	Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
-		// 	chatRoomBuilder
-		// 		.creator(member)
-		// 		.creatorName(member.getNickname());
-		// } else if (hasText(requestDto.getCreatorName())) {
-		// 	chatRoomBuilder.creatorName(requestDto.getCreatorName());
-		// }
+		Participant participant = participantRepository.findById(requestDto.getCreator())
+			.orElseThrow(MemberNotFoundException::new);
+
+		chatRoomBuilder.creator(participant);
+
 		ChatRoom chatRoom = chatRoomBuilder.build();
 		return chatRoom;
 	}

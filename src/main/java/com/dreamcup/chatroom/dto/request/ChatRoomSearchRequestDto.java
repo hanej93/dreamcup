@@ -19,7 +19,7 @@ public class ChatRoomSearchRequestDto {
     private static final int MAX_SIZE = 2000;
 
     @Builder.Default
-    private Integer page = 1;
+    private Integer page = 0;
 
     @Builder.Default
     private Integer size = 10;
@@ -27,8 +27,10 @@ public class ChatRoomSearchRequestDto {
     private String schType;
     private String keyword;
 
+    // todo : 정렬 조건 추가?
+
     public long getOffset() {
-        return (long) (max(1, page) - 1) * min(size, MAX_SIZE);
+        return (long) max(0, page) * min(size, MAX_SIZE);
     }
 
 }

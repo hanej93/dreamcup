@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -17,9 +18,13 @@ public class QParticipant extends EntityPathBase<Participant> {
 
     private static final long serialVersionUID = -1653839850L;
 
+    private static final PathInits INITS = PathInits.DIRECT2;
+
     public static final QParticipant participant = new QParticipant("participant");
 
     public final com.dreamcup.common.entity.common.QBaseTimeEntity _super = new com.dreamcup.common.entity.common.QBaseTimeEntity(this);
+
+    public final com.dreamcup.chatroom.entity.QChatRoom chatRoom;
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
@@ -34,15 +39,24 @@ public class QParticipant extends EntityPathBase<Participant> {
     public final DateTimePath<java.time.LocalDateTime> updatedDate = _super.updatedDate;
 
     public QParticipant(String variable) {
-        super(Participant.class, forVariable(variable));
+        this(Participant.class, forVariable(variable), INITS);
     }
 
     public QParticipant(Path<? extends Participant> path) {
-        super(path.getType(), path.getMetadata());
+        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
     public QParticipant(PathMetadata metadata) {
-        super(Participant.class, metadata);
+        this(metadata, PathInits.getFor(metadata, INITS));
+    }
+
+    public QParticipant(PathMetadata metadata, PathInits inits) {
+        this(Participant.class, metadata, inits);
+    }
+
+    public QParticipant(Class<? extends Participant> type, PathMetadata metadata, PathInits inits) {
+        super(type, metadata, inits);
+        this.chatRoom = inits.isInitialized("chatRoom") ? new com.dreamcup.chatroom.entity.QChatRoom(forProperty("chatRoom"), inits.get("chatRoom")) : null;
     }
 
 }

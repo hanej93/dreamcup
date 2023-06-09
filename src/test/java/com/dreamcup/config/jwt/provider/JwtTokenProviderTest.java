@@ -24,8 +24,8 @@ class JwtTokenProviderTest {
 		Member member = Member.builder()
 			.username("user1")
 			.build();
-		MemberAuthority memberAuthority = new MemberAuthority();
-		memberAuthority.addMemberAuthority(member, AuthorityEnum.ROLE_USER);
+		MemberAuthority memberAuthority = new MemberAuthority(member, AuthorityEnum.ROLE_USER);
+		member.addMemberAuthorities(memberAuthority);
 
 		LoginUser loginUser = new LoginUser(member);
 		// when
@@ -43,8 +43,8 @@ class JwtTokenProviderTest {
 		Member member = Member.builder()
 			.username("user1")
 			.build();
-		MemberAuthority memberAuthority = new MemberAuthority();
-		memberAuthority.addMemberAuthority(member, AuthorityEnum.ROLE_USER);
+		MemberAuthority memberAuthority = new MemberAuthority(member, AuthorityEnum.ROLE_USER);
+		member.addMemberAuthorities(memberAuthority);
 
 		LoginUser loginUser = new LoginUser(member);
 		String bearerToken = JwtTokenProvider.generateTokenWithPrefix(loginUser);
@@ -64,8 +64,8 @@ class JwtTokenProviderTest {
 		Member member = Member.builder()
 			.username("user1")
 			.build();
-		MemberAuthority memberAuthority = new MemberAuthority();
-		memberAuthority.addMemberAuthority(member, AuthorityEnum.ROLE_USER);
+		MemberAuthority memberAuthority = new MemberAuthority(member, AuthorityEnum.ROLE_USER);
+		member.addMemberAuthorities(memberAuthority);
 
 		LoginUser loginUser = new LoginUser(member);
 		String bearerToken = JwtTokenProvider.generateTokenWithPrefix(loginUser);

@@ -42,8 +42,8 @@ class MemberRepositoryTest {
 			.nickName("user-nick")
 			.build();
 
-		MemberAuthority memberAuthority = new MemberAuthority();
-		memberAuthority.addMemberAuthority(member, AuthorityEnum.ROLE_USER);
+		MemberAuthority memberAuthority = new MemberAuthority(member, AuthorityEnum.ROLE_USER);
+		member.addMemberAuthorities(memberAuthority);
 
 		em.persist(member);
 
