@@ -77,11 +77,9 @@ public class JwtTokenProvider {
 			.username(username)
 			.build();
 
-		Set<MemberAuthority> memberAuthorities = Arrays.stream(splitAuthority)
-			.map(auth -> new MemberAuthority(member, AuthorityEnum.valueOf(auth)))
-			.collect(Collectors.toSet());
-
-		member.addMemberAuthorities(memberAuthorities);
+		Arrays.stream(splitAuthority)
+			.map(AuthorityEnum::valueOf)
+			.forEach(member::addMemberAuthority);
 
 		LoginUser loginUser = new LoginUser(member);
 		return loginUser;

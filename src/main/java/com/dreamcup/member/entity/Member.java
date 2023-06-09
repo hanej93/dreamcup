@@ -47,12 +47,14 @@ public class Member extends Participant {
 		this.password = password;
 	}
 
-	public void addMemberAuthorities(MemberAuthority... authorities) {
-		addMemberAuthorities(Arrays.asList(authorities));
+	public void addMemberAuthority(AuthorityEnum authorityEnum) {
+		MemberAuthority memberAuthority = new MemberAuthority(this, authorityEnum);
+		authorities.add(memberAuthority);
 	}
 
-	public void addMemberAuthorities(Collection<MemberAuthority> authorities) {
-		this.authorities.addAll(authorities);
+	public void removeMemberAuthority(AuthorityEnum authorityEnum) {
+		MemberAuthority memberAuthority = new MemberAuthority(this, authorityEnum);
+		authorities.remove(memberAuthority);
 	}
 
 }

@@ -37,9 +37,7 @@ public class MemberService {
 			.password(passwordEncoder.encode(requestDto.getPassword()))
 			.nickName(requestDto.getNickname())
 			.build();
-
-		MemberAuthority memberAuthority = new MemberAuthority(member, AuthorityEnum.ROLE_USER);
-		member.addMemberAuthorities(memberAuthority);
+		member.addMemberAuthority(AuthorityEnum.ROLE_USER);
 
 		memberRepository.save(member);
 

@@ -14,6 +14,7 @@ import com.dreamcup.chatroom.dto.request.ChatRoomSearchRequestDto;
 import com.dreamcup.chatroom.dto.request.ChatRoomUpdateRequestDto;
 import com.dreamcup.chatroom.dto.response.ChatRoomResponseDto;
 import com.dreamcup.chatroom.entity.ChatRoom;
+import com.dreamcup.chatroom.entity.ChatRoomParticipants;
 import com.dreamcup.chatroom.exception.ChatRoomNotFoundException;
 import com.dreamcup.chatroom.repository.ChatRoomRepository;
 import com.dreamcup.chatroom.vo.ChatVo;
@@ -75,6 +76,9 @@ public class ChatRoomService {
 		chatRoomBuilder.creator(participant);
 
 		ChatRoom chatRoom = chatRoomBuilder.build();
+
+		chatRoom.addParticipant(participant);
+
 		return chatRoom;
 	}
 

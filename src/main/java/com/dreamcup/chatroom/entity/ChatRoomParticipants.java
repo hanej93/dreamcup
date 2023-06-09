@@ -10,8 +10,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChatRoomParticipants extends BaseTimeEntity {
 
 	@Id
@@ -26,4 +29,13 @@ public class ChatRoomParticipants extends BaseTimeEntity {
 	@JoinColumn(name = "participant_id")
 	private Participant participant;
 
+	public ChatRoomParticipants(ChatRoom chatRoom, Participant participant) {
+		this.chatRoom = chatRoom;
+		this.participant = participant;
+	}
+
+	public void clearChatRoomAndParticipant() {
+		this.chatRoom = null;
+		this.participant = null;
+	}
 }

@@ -44,13 +44,34 @@ public class ChatRoom extends BaseTimeEntity {
 	private Participant creator;
 
 	@OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Participant> participants = new ArrayList<>();
+	private List<ChatRoomParticipants> participants = new ArrayList<>();
 
 	@OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
 	private List<Chat> chats = new ArrayList<>();
 
 	// todo: template
 	// private List<DreamCupTemplate> = new ArrayList<>();
+
+	@Builder
+	public ChatRoom(String title, String password, Integer maxUserCount, Participant creator) {
+		this.title = title;
+		this.password = password;
+		this.maxUserCount = maxUserCount;
+		this.creator = creator;
+	}
+
+	public void addParticipant(Participant participant) {
+		ChatRoomParticipants chatRoomParticipants = new ChatRoomParticipants(this, participant);
+		participants.add(chatRoomParticipants);
+		participant.getChatRoomParticipants().add(chatRoomParticipants);
+	}
+
+	public void removeParticipant(Participant participant) {
+		ChatRoomParticipants chatRoomParticipants = new ChatRoomParticipants(this, participant);
+		participant.getChatRoomParticipants().remove(chatRoomParticipants);
+		participants.remove(chatRoomParticipants);
+		chatRoomParticipants.clearChatRoomAndParticipant();
+	}
 
 	public ChatRoom(String title) {
 		this.title = title;
@@ -60,11 +81,4 @@ public class ChatRoom extends BaseTimeEntity {
 		this.title = title;
 	}
 
-	@Builder
-	public ChatRoom(String title, String password, Integer maxUserCount, Participant creator) {
-		this.title = title;
-		this.password = password;
-		this.maxUserCount = maxUserCount;
-		this.creator = creator;
-	}
 }

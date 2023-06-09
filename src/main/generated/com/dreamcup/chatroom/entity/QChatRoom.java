@@ -35,7 +35,7 @@ public class QChatRoom extends EntityPathBase<ChatRoom> {
 
     public final NumberPath<Integer> maxUserCount = createNumber("maxUserCount", Integer.class);
 
-    public final ListPath<com.dreamcup.member.entity.Participant, com.dreamcup.member.entity.QParticipant> participants = this.<com.dreamcup.member.entity.Participant, com.dreamcup.member.entity.QParticipant>createList("participants", com.dreamcup.member.entity.Participant.class, com.dreamcup.member.entity.QParticipant.class, PathInits.DIRECT2);
+    public final ListPath<ChatRoomParticipants, QChatRoomParticipants> participants = this.<ChatRoomParticipants, QChatRoomParticipants>createList("participants", ChatRoomParticipants.class, QChatRoomParticipants.class, PathInits.DIRECT2);
 
     public final StringPath password = createString("password");
 
@@ -62,7 +62,7 @@ public class QChatRoom extends EntityPathBase<ChatRoom> {
 
     public QChatRoom(Class<? extends ChatRoom> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.creator = inits.isInitialized("creator") ? new com.dreamcup.member.entity.QParticipant(forProperty("creator"), inits.get("creator")) : null;
+        this.creator = inits.isInitialized("creator") ? new com.dreamcup.member.entity.QParticipant(forProperty("creator")) : null;
     }
 
 }

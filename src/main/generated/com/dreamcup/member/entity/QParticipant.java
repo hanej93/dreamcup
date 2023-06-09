@@ -18,13 +18,11 @@ public class QParticipant extends EntityPathBase<Participant> {
 
     private static final long serialVersionUID = -1653839850L;
 
-    private static final PathInits INITS = PathInits.DIRECT2;
-
     public static final QParticipant participant = new QParticipant("participant");
 
     public final com.dreamcup.common.entity.common.QBaseTimeEntity _super = new com.dreamcup.common.entity.common.QBaseTimeEntity(this);
 
-    public final com.dreamcup.chatroom.entity.QChatRoom chatRoom;
+    public final ListPath<com.dreamcup.chatroom.entity.ChatRoomParticipants, com.dreamcup.chatroom.entity.QChatRoomParticipants> chatRoomParticipants = this.<com.dreamcup.chatroom.entity.ChatRoomParticipants, com.dreamcup.chatroom.entity.QChatRoomParticipants>createList("chatRoomParticipants", com.dreamcup.chatroom.entity.ChatRoomParticipants.class, com.dreamcup.chatroom.entity.QChatRoomParticipants.class, PathInits.DIRECT2);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
@@ -39,24 +37,15 @@ public class QParticipant extends EntityPathBase<Participant> {
     public final DateTimePath<java.time.LocalDateTime> updatedDate = _super.updatedDate;
 
     public QParticipant(String variable) {
-        this(Participant.class, forVariable(variable), INITS);
+        super(Participant.class, forVariable(variable));
     }
 
     public QParticipant(Path<? extends Participant> path) {
-        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
+        super(path.getType(), path.getMetadata());
     }
 
     public QParticipant(PathMetadata metadata) {
-        this(metadata, PathInits.getFor(metadata, INITS));
-    }
-
-    public QParticipant(PathMetadata metadata, PathInits inits) {
-        this(Participant.class, metadata, inits);
-    }
-
-    public QParticipant(Class<? extends Participant> type, PathMetadata metadata, PathInits inits) {
-        super(type, metadata, inits);
-        this.chatRoom = inits.isInitialized("chatRoom") ? new com.dreamcup.chatroom.entity.QChatRoom(forProperty("chatRoom"), inits.get("chatRoom")) : null;
+        super(Participant.class, metadata);
     }
 
 }
