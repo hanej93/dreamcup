@@ -1,5 +1,7 @@
 package com.dreamcup.member.entity;
 
+import static jakarta.persistence.GenerationType.*;
+
 import com.dreamcup.common.entity.common.BaseTimeEntity;
 
 import jakarta.persistence.Column;
@@ -20,7 +22,7 @@ import lombok.NoArgsConstructor;
 public abstract class Participant extends BaseTimeEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = IDENTITY)
 	private Long id;
 
 	@Column(nullable = false)

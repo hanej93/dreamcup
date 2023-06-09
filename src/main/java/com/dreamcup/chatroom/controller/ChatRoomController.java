@@ -1,7 +1,6 @@
 package com.dreamcup.chatroom.controller;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -43,9 +42,9 @@ public class ChatRoomController {
 	}
 
 	@GetMapping("/chatRoom")
-	public ResponseEntity<List<ChatRoomResponseDto>> getList(@ModelAttribute ChatRoomSearchRequestDto requestDto) {
-		List<ChatRoomResponseDto> pagenatedList = chatRoomService.getPagenatedList(requestDto);
-		return ResponseEntity.ok(pagenatedList);
+	public ResponseEntity<Page<ChatRoomResponseDto>> getList(@ModelAttribute ChatRoomSearchRequestDto requestDto) {
+		Page<ChatRoomResponseDto> pagedDtos = chatRoomService.getPagedChatRooms(requestDto);
+		return ResponseEntity.ok(pagedDtos);
 	}
 
 	@PatchMapping("/chatRoom/{chatRoomId}")

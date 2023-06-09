@@ -1,5 +1,8 @@
 package com.dreamcup.chatroom.entity;
 
+import static jakarta.persistence.FetchType.*;
+import static jakarta.persistence.GenerationType.*;
+
 import com.dreamcup.common.entity.common.BaseTimeEntity;
 import com.dreamcup.member.entity.Participant;
 
@@ -18,14 +21,14 @@ import lombok.NoArgsConstructor;
 public class ChatRoomParticipants extends BaseTimeEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = IDENTITY)
 	private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "chat_room_id")
 	private ChatRoom chatRoom;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "participant_id")
 	private Participant participant;
 

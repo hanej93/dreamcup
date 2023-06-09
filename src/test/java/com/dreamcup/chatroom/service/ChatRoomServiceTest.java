@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.dreamcup.chatroom.dto.request.ChatRoomSaveRequestDto;
@@ -109,10 +110,10 @@ class ChatRoomServiceTest {
 			.build();
 
 		// when
-		List<ChatRoomResponseDto> pagenatedList = chatRoomService.getPagenatedList(request);
+		Page<ChatRoomResponseDto> pagenatedList = chatRoomService.getPagedChatRooms(request);
 
 		// then
-		assertThat(pagenatedList.size()).isEqualTo(5L);
+		assertThat(pagenatedList.getSize()).isEqualTo(5L);
 		assertThat(pagenatedList).filteredOn(room -> room.getTitle().contains("제목1")).hasSize(5);
 	}
 
@@ -130,10 +131,10 @@ class ChatRoomServiceTest {
 			.build();
 
 		// when
-		List<ChatRoomResponseDto> pagenatedList = chatRoomService.getPagenatedList(request);
+		Page<ChatRoomResponseDto> pagenatedList = chatRoomService.getPagedChatRooms(request);
 
 		// then
-		assertThat(pagenatedList.size()).isEqualTo(10L);
+		assertThat(pagenatedList.getSize()).isEqualTo(10L);
 		assertThat(pagenatedList).extracting("title").contains("제목입니다.");
 	}
 

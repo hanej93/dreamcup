@@ -1,5 +1,7 @@
 package com.dreamcup.member.entity;
 
+import static jakarta.persistence.FetchType.*;
+
 import com.dreamcup.member.code.AuthorityEnum;
 
 import jakarta.persistence.Entity;
@@ -20,7 +22,7 @@ import lombok.NoArgsConstructor;
 public class MemberAuthority {
 
 	@Id
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "member_id")
 	private Member member;
 

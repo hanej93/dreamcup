@@ -46,6 +46,7 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepositoryCustom {
 			.select(new QChatRoomResponseDto(
 				chatRoom.chatRoomId,
 				chatRoom.title,
+				chatRoom.creator.nickName,
 				chatRoom.maxUserCount,
 				ExpressionUtils.as(chatRoom.participants.size(), "currentUserCount"),
 				chatRoom.updatedDate
@@ -61,7 +62,6 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepositoryCustom {
 
 		Long total = jpaQueryFactory
 			.select(chatRoom.count())
-			.from(chatRoom)
 			.from(chatRoom)
 			.where(
 				keywordContains(requestDto.getSchType(), requestDto.getKeyword())

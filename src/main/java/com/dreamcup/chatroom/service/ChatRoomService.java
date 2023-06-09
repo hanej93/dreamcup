@@ -1,7 +1,6 @@
 package com.dreamcup.chatroom.service;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -88,8 +87,8 @@ public class ChatRoomService {
 		return id;
 	}
 
-	public List<ChatRoomResponseDto> getPagenatedList(ChatRoomSearchRequestDto requestDto) {
-		return chatRoomRepository.getPagenatedList(requestDto);
+	public Page<ChatRoomResponseDto> getPagedChatRooms(ChatRoomSearchRequestDto requestDto) {
+		return chatRoomRepository.getPagedChatRooms(requestDto);
 	}
 
 	public ChatRoomResponseDto findById(Long id) {

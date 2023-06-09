@@ -11,21 +11,17 @@ public class ChatRoomResponseDto {
 
     private Long chatRoomId;
     private String title;
+    private String creatorName;
     private Integer maxUserCount;
     private Integer currentUserCount;
     private LocalDateTime updatedDate;
 
-    // todo:
-    // chatRoomId
-    // maxUserCount
-    // currentUserCount
-    // ....
-
     @QueryProjection
-    public ChatRoomResponseDto(Long chatRoomId, String title, Integer maxUserCount, Integer currentUserCount,
-        LocalDateTime updatedDate) {
+    public ChatRoomResponseDto(Long chatRoomId, String title, String creatorName, Integer maxUserCount,
+        Integer currentUserCount, LocalDateTime updatedDate) {
         this.chatRoomId = chatRoomId;
         this.title = title;
+        this.creatorName = creatorName;
         this.maxUserCount = maxUserCount;
         this.currentUserCount = currentUserCount;
         this.updatedDate = updatedDate;

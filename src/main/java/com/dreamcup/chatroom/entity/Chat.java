@@ -1,5 +1,8 @@
 package com.dreamcup.chatroom.entity;
 
+import static jakarta.persistence.FetchType.*;
+import static jakarta.persistence.GenerationType.*;
+
 import com.dreamcup.chatroom.code.MessageType;
 import com.dreamcup.common.entity.common.BaseTimeEntity;
 import com.dreamcup.member.entity.Participant;
@@ -28,13 +31,13 @@ import lombok.NoArgsConstructor;
 public class Chat extends BaseTimeEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = IDENTITY)
 	private Long chatId;
 
 	@Column(nullable = false)
 	private String message;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "sender_id")
 	private Participant sender;
 
@@ -42,7 +45,7 @@ public class Chat extends BaseTimeEntity {
 	@Column(nullable = false)
 	private MessageType messageType;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "chat_room_id")
 	private ChatRoom chatRoom;
 

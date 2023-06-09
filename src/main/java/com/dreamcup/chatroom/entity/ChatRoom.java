@@ -1,5 +1,9 @@
 package com.dreamcup.chatroom.entity;
 
+import static jakarta.persistence.CascadeType.*;
+import static jakarta.persistence.FetchType.*;
+import static jakarta.persistence.GenerationType.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +31,7 @@ import lombok.NoArgsConstructor;
 public class ChatRoom extends BaseTimeEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = IDENTITY)
 	private Long chatRoomId;
 
 	@Column(length = 100, nullable = false)
@@ -39,14 +43,14 @@ public class ChatRoom extends BaseTimeEntity {
 	@Column(nullable = false)
 	private Integer maxUserCount;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "participant_id")
 	private Participant creator;
 
-	@OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "chatRoom", cascade = ALL, orphanRemoval = true)
 	private List<ChatRoomParticipants> participants = new ArrayList<>();
 
-	@OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "chatRoom", cascade = ALL)
 	private List<Chat> chats = new ArrayList<>();
 
 	// todo: template

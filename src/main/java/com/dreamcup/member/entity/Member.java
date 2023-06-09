@@ -1,5 +1,7 @@
 package com.dreamcup.member.entity;
 
+import static jakarta.persistence.CascadeType.*;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,7 +27,7 @@ public class Member extends Participant {
 	@Column(length = 100)
 	private String password;
 
-	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "member", cascade = ALL, orphanRemoval = true)
 	private Set<MemberAuthority> authorities = new HashSet<>();
 
 	@Override
