@@ -31,8 +31,11 @@ public class ChatService {
 
 	@Transactional
 	public Chat save(ChatVo chatVo) {
-		Participant sender = participantRepository.findById(chatVo.getSenderId())
-			.orElseThrow(UserNotFoundException::new);
+		Participant sender = null;
+		if (chatVo.getSenderId() != null) {
+			sender = participantRepository.findById(chatVo.getSenderId())
+				.orElseThrow(UserNotFoundException::new);
+		}
 
 		Chat chat = Chat.builder()
 			.message(chatVo.getMessage())
