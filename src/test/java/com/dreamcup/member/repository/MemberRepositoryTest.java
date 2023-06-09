@@ -39,7 +39,7 @@ class MemberRepositoryTest {
 		Member member = Member.builder()
 			.username("user")
 			.password("1234")
-			.nickname("user-nick")
+			.nickName("user-nick")
 			.build();
 
 		MemberAuthority memberAuthority = new MemberAuthority();

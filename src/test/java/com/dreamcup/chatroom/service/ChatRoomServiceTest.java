@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.dreamcup.chatroom.dto.request.ChatRoomSaveRequestDto;
 import com.dreamcup.chatroom.dto.request.ChatRoomSearchRequestDto;
@@ -28,6 +29,9 @@ class ChatRoomServiceTest {
 
 	@Autowired
 	private ChatRoomRepository chatRoomRepository;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@BeforeEach
 	void clean() {
@@ -51,11 +55,15 @@ class ChatRoomServiceTest {
 	void save() {
 		// given
 		ChatRoomSaveRequestDto request = ChatRoomSaveRequestDto.builder()
-			.title("제목입니다.")
+			.title("테스트 제목")
+			.rawPassword("1234")
+			.memberId(1L)
+			.userMaxCount(4)
 			.build();
 
+		// todo : refactor code
 		// when
-		Long id = chatRoomService.save(request);
+		Long id = chatRoomService.createChatRoom(request);
 
 		// then
 		assertThat(chatRoomRepository.count()).isEqualTo(1L);

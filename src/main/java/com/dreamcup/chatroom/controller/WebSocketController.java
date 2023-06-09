@@ -1,12 +1,11 @@
 package com.dreamcup.chatroom.controller;
 
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dreamcup.config.RabbitMqConfig;
+import com.dreamcup.chatroom.service.ChatService;
+import com.dreamcup.chatroom.vo.ChatVo;
 
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,19 +14,12 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class WebSocketController {
 
-	private final RabbitTemplate rabbitTemplate;
+	private final ChatService chatService;
 
 	@MessageMapping("/message")
-	public void sendMessage(ChatMessage chatMessage) {
-		log.debug("WebSocketController.sendMessage : {}", chatMessage);
-		rabbitTemplate.convertAndSend(RabbitMqConfig.CHAT_EXCHANGE_NAME, "message." + chatMessage.getChatRoomUid(), chatMessage);
-	}
-
-	@Data
-	public static class ChatMessage {
-		private String chatRoomUid;
-		private String sender;
-		private String content;
+	public void sendMessage(ChatVo chatVo) {
+		log.debug("WebSocketController.sendMessage : {}", chatVo);
+		chatService.sendMessage(chatVo);
 	}
 
 }

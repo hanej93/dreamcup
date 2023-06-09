@@ -31,8 +31,8 @@ public class ChatRoomController {
 	private final ChatRoomService chatRoomService;
 
 	@PostMapping("/chatRoom")
-	public ResponseEntity<Long> post(@RequestBody @Valid ChatRoomSaveRequestDto requestDto) {
-		Long id = chatRoomService.save(requestDto);
+	public ResponseEntity<Long> createChatRoom(@RequestBody @Valid ChatRoomSaveRequestDto requestDto) {
+		Long id = chatRoomService.createChatRoom(requestDto);
 		return new ResponseEntity<>(id, HttpStatus.CREATED);
 	}
 

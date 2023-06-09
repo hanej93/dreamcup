@@ -35,7 +35,7 @@ public class MemberService {
 		Member member = Member.builder()
 			.username(requestDto.getUsername())
 			.password(passwordEncoder.encode(requestDto.getPassword()))
-			.nickname(requestDto.getNickname())
+			.nickName(requestDto.getNickname())
 			.build();
 
 		MemberAuthority memberAuthority = new MemberAuthority();
@@ -43,8 +43,7 @@ public class MemberService {
 
 		memberRepository.save(member);
 
-		return member.getMemberId();
+		return member.getId();
 	}
-
 
 }

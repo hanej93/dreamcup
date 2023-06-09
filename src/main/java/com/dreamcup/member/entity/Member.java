@@ -14,18 +14,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long memberId;
+public class Member extends Participant{
 
 	@Column(length = 50, unique = true)
 	private String username;
@@ -33,17 +31,12 @@ public class Member {
 	@Column(length = 100)
 	private String password;
 
-	@Column(length = 50)
-	private String nickname;
-
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<MemberAuthority> authorities = new HashSet<>();
 
-	@Builder
-	public Member(String username, String password, String nickname) {
-		this.username = username;
-		this.password = password;
-		this.nickname = nickname;
+	@Override
+	public boolean isAnonymous() {
+		return false;
 	}
 
 	public <T extends Collection<MemberAuthority>> void addMemberAuthorities(T authorities) {
@@ -52,4 +45,15 @@ public class Member {
 		}
 	}
 
+	public Member(String username, String password) {
+		this.username = username;
+		this.password = password;
+	}
+
+	@Builder
+	public Member(String nickName, String nameTag, String username, String password) {
+		super(nickName, nameTag);
+		this.username = username;
+		this.password = password;
+	}
 }

@@ -13,7 +13,7 @@ public class LoginResponseDto {
 	private String username;
 
 	public LoginResponseDto(Member member) {
-		this.id = member.getMemberId();
+		this.id = member.getId();
 		this.username = member.getUsername();
 	}
 

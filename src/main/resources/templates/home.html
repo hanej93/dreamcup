@@ -59,12 +59,12 @@
         let messageContent = document.getElementById('message').value;
         let sender = document.getElementById('sender').value;
         let chatRoomUid = document.getElementById('chatRoomUid').value;
-        let chatMessage = {
+        let chatVo = {
             chatRoomUid: chatRoomUid,
             sender: sender,
             content: messageContent,
         };
-        stompClient.send("/pub/message", {}, JSON.stringify(chatMessage));
+        stompClient.send("/pub/message", {}, JSON.stringify(chatVo));
     }
 
     function showMessage(message) {

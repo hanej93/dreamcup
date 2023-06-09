@@ -1,6 +1,6 @@
 package com.dreamcup.chatroom.dto.request;
 
-import com.dreamcup.chatroom.entity.ChatRoom;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -16,11 +16,9 @@ public class ChatRoomSaveRequestDto {
 
 	@NotBlank(message = "제목을 입력해주세요.")
     private String title;
-
-    public ChatRoom toEntity() {
-        return ChatRoom.builder()
-                .title(title)
-                .build();
-    }
+	private String rawPassword;
+	private Integer userMaxCount;
+	private Long memberId;
+	private String creatorName;
 
 }

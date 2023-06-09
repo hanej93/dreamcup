@@ -7,22 +7,21 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
-import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
- * QMember is a Querydsl query type for Member
+ * QAnonymousUser is a Querydsl query type for AnonymousUser
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
-public class QMember extends EntityPathBase<Member> {
+public class QAnonymousUser extends EntityPathBase<AnonymousUser> {
 
-    private static final long serialVersionUID = -2045849641L;
+    private static final long serialVersionUID = 2144772603L;
 
-    public static final QMember member = new QMember("member1");
+    public static final QAnonymousUser anonymousUser = new QAnonymousUser("anonymousUser");
 
     public final QParticipant _super = new QParticipant(this);
 
-    public final SetPath<MemberAuthority, QMemberAuthority> authorities = this.<MemberAuthority, QMemberAuthority>createSet("authorities", MemberAuthority.class, QMemberAuthority.class, PathInits.DIRECT2);
+    public final BooleanPath anonymous = createBoolean("anonymous");
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
@@ -36,23 +35,19 @@ public class QMember extends EntityPathBase<Member> {
     //inherited
     public final StringPath nickName = _super.nickName;
 
-    public final StringPath password = createString("password");
-
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedDate = _super.updatedDate;
 
-    public final StringPath username = createString("username");
-
-    public QMember(String variable) {
-        super(Member.class, forVariable(variable));
+    public QAnonymousUser(String variable) {
+        super(AnonymousUser.class, forVariable(variable));
     }
 
-    public QMember(Path<? extends Member> path) {
+    public QAnonymousUser(Path<? extends AnonymousUser> path) {
         super(path.getType(), path.getMetadata());
     }
 
-    public QMember(PathMetadata metadata) {
-        super(Member.class, metadata);
+    public QAnonymousUser(PathMetadata metadata) {
+        super(AnonymousUser.class, metadata);
     }
 
 }
