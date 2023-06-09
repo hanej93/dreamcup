@@ -46,4 +46,7 @@ public class Chat extends BaseTimeEntity {
 	@JoinColumn(name = "chat_room_id")
 	private ChatRoom chatRoom;
 
+	public void setChatRoom(ChatRoom chatRoom) {
+		this.chatRoom = chatRoom;
+	}
 }

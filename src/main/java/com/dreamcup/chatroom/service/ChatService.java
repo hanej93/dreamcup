@@ -5,13 +5,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.dreamcup.chatroom.entity.Chat;
-import com.dreamcup.chatroom.entity.ChatRoom;
 import com.dreamcup.chatroom.repository.ChatRepository;
-import com.dreamcup.chatroom.repository.ChatRoomRepository;
 import com.dreamcup.chatroom.vo.ChatVo;
 import com.dreamcup.config.RabbitMqConfig;
 import com.dreamcup.member.entity.Participant;
-import com.dreamcup.member.exception.MemberNotFoundException;
+import com.dreamcup.member.exception.UserNotFoundException;
 import com.dreamcup.member.repository.ParticipantRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -23,7 +21,6 @@ public class ChatService {
 
 	private final RabbitTemplate rabbitTemplate;
 	private final ChatRepository chatRepository;
-	private final ChatRoomRepository chatRoomRepository;
 	private final ParticipantRepository participantRepository;
 
 	@Transactional
@@ -33,22 +30,17 @@ public class ChatService {
 	}
 
 	@Transactional
-	public void save(ChatVo chatVo) {
-		ChatRoom chatRoom = chatRoomRepository.findById(chatVo.getChatRoomId())
-			.orElseThrow(() -> new IllegalArgumentException()); // todo : ChatRoomNotFoundException
-
+	public Chat save(ChatVo chatVo) {
 		Participant sender = participantRepository.findById(chatVo.getSenderId())
-			.orElseThrow(MemberNotFoundException::new);
+			.orElseThrow(UserNotFoundException::new);
 
 		Chat chat = Chat.builder()
 			.message(chatVo.getMessage())
 			.sender(sender)
-			.chatRoom(chatRoom)
 			.messageType(chatVo.getMessageType())
 			.build();
 
-		Long chatId = chatRepository.save(chat).getChatId();
-		chatVo.setChatId(chatId);
+		return chatRepository.save(chat);
 	}
 
 }

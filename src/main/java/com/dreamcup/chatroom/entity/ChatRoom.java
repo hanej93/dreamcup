@@ -60,6 +60,11 @@ public class ChatRoom extends BaseTimeEntity {
 		this.creator = creator;
 	}
 
+	public void addChat(Chat chat) {
+		chats.add(chat);
+		chat.setChatRoom(this);
+	}
+
 	public void addParticipant(Participant participant) {
 		ChatRoomParticipants chatRoomParticipants = new ChatRoomParticipants(this, participant);
 		participants.add(chatRoomParticipants);

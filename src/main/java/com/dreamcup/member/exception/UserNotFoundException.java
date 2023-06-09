@@ -4,15 +4,15 @@ import org.springframework.http.HttpStatus;
 
 import com.dreamcup.common.exception.CustomException;
 
-public class MemberNotFoundException extends CustomException {
+public class UserNotFoundException extends CustomException {
 
-	private static final String MESSAGE = "회원을 찾을 수 없습니다.";
+	private static final String MESSAGE = "사용자를 찾을 수 없습니다.";
 
-	public MemberNotFoundException() {
+	public UserNotFoundException() {
 		super(MESSAGE);
 	}
 
-	public MemberNotFoundException(Throwable cause) {
+	public UserNotFoundException(Throwable cause) {
 		super(MESSAGE, cause);
 	}
 

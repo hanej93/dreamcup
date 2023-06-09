@@ -1,7 +1,5 @@
 package com.dreamcup.chatroom.service;
 
-import static org.springframework.util.StringUtils.*;
-
 import java.util.List;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,14 +11,13 @@ import com.dreamcup.chatroom.dto.request.ChatRoomSaveRequestDto;
 import com.dreamcup.chatroom.dto.request.ChatRoomSearchRequestDto;
 import com.dreamcup.chatroom.dto.request.ChatRoomUpdateRequestDto;
 import com.dreamcup.chatroom.dto.response.ChatRoomResponseDto;
+import com.dreamcup.chatroom.entity.Chat;
 import com.dreamcup.chatroom.entity.ChatRoom;
-import com.dreamcup.chatroom.entity.ChatRoomParticipants;
 import com.dreamcup.chatroom.exception.ChatRoomNotFoundException;
 import com.dreamcup.chatroom.repository.ChatRoomRepository;
 import com.dreamcup.chatroom.vo.ChatVo;
 import com.dreamcup.member.entity.Participant;
-import com.dreamcup.member.exception.MemberNotFoundException;
-import com.dreamcup.member.repository.MemberRepository;
+import com.dreamcup.member.exception.UserNotFoundException;
 import com.dreamcup.member.repository.ParticipantRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -47,8 +44,6 @@ public class ChatRoomService {
 
 		ChatRoom chatRoom = convertToChatRoomEntity(requestDto);
 
-		chatRoomRepository.save(chatRoom);
-
 		ChatVo chatVo = ChatVo.builder()
 			.chatRoomId(chatRoom.getChatRoomId())
 			.message("채팅방이 생성되었습니다.") // todo: change constraint
@@ -57,26 +52,28 @@ public class ChatRoomService {
 			.build();
 
 		// chatService.sendMessage(chatVo);
-		chatService.save(chatVo);
+		Chat chat = chatService.save(chatVo);
+		chatRoom.addChat(chat);
 
+		chatRoomRepository.save(chatRoom);
 		return chatRoom.getChatRoomId();
 	}
 
 	private ChatRoom convertToChatRoomEntity(ChatRoomSaveRequestDto requestDto) {
-		Participant participant = participantRepository.findById(requestDto.getCreator())
-			.orElseThrow(MemberNotFoundException::new);
+		Participant creator = participantRepository.findById(requestDto.getCreator())
+			.orElseThrow(UserNotFoundException::new);
 
 		String encryptedPassword =
 			requestDto.getRawPassword() == null ? null : passwordEncoder.encode(requestDto.getRawPassword());
 
 		ChatRoom chatRoom = ChatRoom.builder()
 			.title(requestDto.getTitle())
-			.creator(participant)
+			.creator(creator)
 			.maxUserCount(requestDto.getUserMaxCount())
 			.password(encryptedPassword)
 			.build();
 
-		chatRoom.addParticipant(participant);
+		chatRoom.addParticipant(creator);
 
 		return chatRoom;
 	}
