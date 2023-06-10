@@ -1,10 +1,11 @@
 package com.dreamcup.chatroom.dto.response;
 
+import java.time.LocalDateTime;
+
 import com.dreamcup.chatroom.entity.ChatRoom;
 import com.querydsl.core.annotations.QueryProjection;
-import lombok.Getter;
 
-import java.time.LocalDateTime;
+import lombok.Getter;
 
 @Getter
 public class ChatRoomResponseDto {
