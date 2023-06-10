@@ -38,3 +38,4 @@ out/
 
 ### Project Ignore ###
 application-local.yml
+src/main/generated/com/dreamcup/**/Q*.java
