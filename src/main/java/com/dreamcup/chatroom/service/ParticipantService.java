@@ -5,7 +5,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.dreamcup.chatroom.dto.request.ChatRoomJoinRequestDto;
 import com.dreamcup.chatroom.entity.ChatRoom;
+import com.dreamcup.chatroom.exception.AlreadyParticipantException;
 import com.dreamcup.chatroom.exception.ChatRoomNotFoundException;
+import com.dreamcup.chatroom.exception.MaxUserLimitExceededException;
 import com.dreamcup.chatroom.repository.ChatRoomParticipantsRepository;
 import com.dreamcup.chatroom.repository.ChatRoomRepository;
 import com.dreamcup.member.entity.Participant;
@@ -29,14 +31,14 @@ public class ParticipantService {
 			requestDto.getParticipantId());
 
 		if (isAlreadyParticipant) {
-			throw new IllegalArgumentException();
+			throw new AlreadyParticipantException();
 		}
 
 		ChatRoom chatRoom = chatRoomRepository.findById(requestDto.getChatRoomId())
 			.orElseThrow(ChatRoomNotFoundException::new);
 
 		if (chatRoom.isOverMaxUser()) {
-			throw new IllegalArgumentException();
+			throw new MaxUserLimitExceededException();
 		}
 
 		Participant participant = participantRepository.findById(requestDto.getParticipantId())
