@@ -32,14 +32,22 @@ public class ChatRoomService {
 
 	@Transactional
 	public Long createChatRoom(ChatRoomSaveRequestDto requestDto) {
-		ChatRoom chatRoom = convertToChatRoomEntity(requestDto);
+		Participant creator = participantRepository.findById(requestDto.getCreator())
+			.orElseThrow(UserNotFoundException::new);
 
-		// todo : refactoring
+		ChatRoom chatRoom = ChatRoom.builder()
+			.title(requestDto.getTitle())
+			.creator(creator)
+			.maxUserCount(requestDto.getUserMaxCount())
+			.privateCode(requestDto.isPrivate() ? generateUniquePrivateCode() : null)
+			.build();
+
+		chatRoom.addParticipant(creator);
+
 		ChatVo chatVo = ChatVo.builder()
 			.chatRoomId(chatRoom.getId())
-			.message("채팅방이 생성되었습니다.") // todo: change constraint
+			.message("채팅방이 생성되었습니다.")
 			.messageType(MessageType.SYSTEM)
-			.senderId(null)
 			.build();
 
 		Chat chat = chatService.save(chatVo);
@@ -47,27 +55,6 @@ public class ChatRoomService {
 
 		chatRoomRepository.save(chatRoom);
 		return chatRoom.getId();
-	}
-
-	private ChatRoom convertToChatRoomEntity(ChatRoomSaveRequestDto requestDto) {
-		Participant creator = participantRepository.findById(requestDto.getCreator())
-			.orElseThrow(UserNotFoundException::new);
-
-		ChatRoom.ChatRoomBuilder chatRoomBuilder = ChatRoom.builder()
-			.title(requestDto.getTitle())
-			.creator(creator)
-			.maxUserCount(requestDto.getUserMaxCount());
-
-		if (requestDto.isPrivate()) {
-			String privateCode = generateUniquePrivateCode();
-			chatRoomBuilder.privateCode(privateCode);
-		}
-
-		ChatRoom chatRoom = chatRoomBuilder.build();
-
-		chatRoom.addParticipant(creator);
-
-		return chatRoom;
 	}
 
 	private String generateUniquePrivateCode() {
