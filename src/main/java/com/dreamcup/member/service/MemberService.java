@@ -32,7 +32,7 @@ public class MemberService {
 		Member member = Member.builder()
 			.username(requestDto.getUsername())
 			.password(passwordEncoder.encode(requestDto.getPassword()))
-			.nickName(requestDto.getNickname())
+			.nickname(requestDto.getNickname())
 			.build();
 		member.addMemberAuthority(AuthorityEnum.ROLE_USER);
 

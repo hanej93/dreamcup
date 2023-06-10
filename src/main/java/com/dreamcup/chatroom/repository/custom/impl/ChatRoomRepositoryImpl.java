@@ -47,7 +47,7 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepositoryCustom {
 			.select(new QChatRoomResponseDto(
 				chatRoom.id,
 				chatRoom.title,
-				chatRoom.creator.nickName,
+				chatRoom.creator.nickname,
 				chatRoom.maxUserCount,
 				ExpressionUtils.as(chatRoom.participants.size(), "currentUserCount"),
 				chatRoom.updatedDate

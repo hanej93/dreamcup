@@ -15,7 +15,7 @@ public class AnonymousUser extends Participant {
 	}
 
 	@Builder
-	public AnonymousUser(String nickName, String nameTag) {
-		super(nickName, nameTag);
+	public AnonymousUser(String nickname, String nameTag) {
+		super(nickname, nameTag);
 	}
 }

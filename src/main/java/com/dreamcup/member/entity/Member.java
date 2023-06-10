@@ -36,8 +36,8 @@ public class Member extends Participant {
 	}
 
 	@Builder
-	public Member(String nickName, String nameTag, String username, String password) {
-		super(nickName, nameTag);
+	public Member(String nickname, String nameTag, String username, String password) {
+		super(nickname, nameTag);
 		this.username = username;
 		this.password = password;
 	}

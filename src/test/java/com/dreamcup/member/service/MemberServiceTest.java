@@ -62,7 +62,7 @@ class MemberServiceTest {
 		Member member = Member.builder()
 			.username("user")
 			.password("1234")
-			.nickName("user-nick")
+			.nickname("user-nick")
 			.build();
 		memberRepository.save(member);
 
