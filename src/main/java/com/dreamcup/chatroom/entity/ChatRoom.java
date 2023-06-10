@@ -10,12 +10,9 @@ import java.util.List;
 import com.dreamcup.common.entity.common.BaseTimeEntity;
 import com.dreamcup.member.entity.Participant;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -32,7 +29,7 @@ public class ChatRoom extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-	private Long chatRoomId;
+	private Long id;
 
 	@Column(length = 100, nullable = false)
 	private String title;
@@ -44,7 +41,7 @@ public class ChatRoom extends BaseTimeEntity {
 	private Integer maxUserCount;
 
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "participant_id")
+	@JoinColumn(name = "creator")
 	private Participant creator;
 
 	@OneToMany(mappedBy = "chatRoom", cascade = ALL, orphanRemoval = true)
@@ -78,6 +75,10 @@ public class ChatRoom extends BaseTimeEntity {
 		ChatRoomParticipants chatRoomParticipants = new ChatRoomParticipants(this, participant);
 		participants.remove(chatRoomParticipants);
 		chatRoomParticipants.clearChatRoomAndParticipant();
+	}
+
+	public boolean isOverMaxUser() {
+		return this.getParticipants().size() >= this.getMaxUserCount();
 	}
 
 	public ChatRoom(String title) {

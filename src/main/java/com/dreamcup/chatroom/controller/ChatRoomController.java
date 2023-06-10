@@ -29,10 +29,10 @@ public class ChatRoomController {
 
 	private final ChatRoomService chatRoomService;
 
-	@PostMapping("/chatRoom")
-	public ResponseEntity<Long> createChatRoom(@RequestBody @Valid ChatRoomSaveRequestDto requestDto) {
-		Long id = chatRoomService.createChatRoom(requestDto);
-		return new ResponseEntity<>(id, HttpStatus.CREATED);
+	@GetMapping("/chatRoom")
+	public ResponseEntity<Page<ChatRoomResponseDto>> getList(@ModelAttribute ChatRoomSearchRequestDto requestDto) {
+		Page<ChatRoomResponseDto> pagedDtos = chatRoomService.getPagedChatRooms(requestDto);
+		return ResponseEntity.ok(pagedDtos);
 	}
 
 	@GetMapping("/chatRoom/{chatRoomId}")
@@ -41,10 +41,10 @@ public class ChatRoomController {
 		return ResponseEntity.ok(response);
 	}
 
-	@GetMapping("/chatRoom")
-	public ResponseEntity<Page<ChatRoomResponseDto>> getList(@ModelAttribute ChatRoomSearchRequestDto requestDto) {
-		Page<ChatRoomResponseDto> pagedDtos = chatRoomService.getPagedChatRooms(requestDto);
-		return ResponseEntity.ok(pagedDtos);
+	@PostMapping("/chatRoom")
+	public ResponseEntity<Long> createChatRoom(@RequestBody @Valid ChatRoomSaveRequestDto requestDto) {
+		Long id = chatRoomService.createChatRoom(requestDto);
+		return new ResponseEntity<>(id, HttpStatus.CREATED);
 	}
 
 	@PatchMapping("/chatRoom/{chatRoomId}")

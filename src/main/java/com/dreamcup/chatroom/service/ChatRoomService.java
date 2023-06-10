@@ -44,7 +44,7 @@ public class ChatRoomService {
 		ChatRoom chatRoom = convertToChatRoomEntity(requestDto);
 
 		ChatVo chatVo = ChatVo.builder()
-			.chatRoomId(chatRoom.getChatRoomId())
+			.chatRoomId(chatRoom.getId())
 			.message("채팅방이 생성되었습니다.") // todo: change constraint
 			.messageType(MessageType.SYSTEM)
 			.senderId(null)
@@ -55,7 +55,7 @@ public class ChatRoomService {
 		chatRoom.addChat(chat);
 
 		chatRoomRepository.save(chatRoom);
-		return chatRoom.getChatRoomId();
+		return chatRoom.getId();
 	}
 
 	private ChatRoom convertToChatRoomEntity(ChatRoomSaveRequestDto requestDto) {

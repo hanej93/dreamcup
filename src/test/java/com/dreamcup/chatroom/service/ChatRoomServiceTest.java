@@ -88,7 +88,7 @@ class ChatRoomServiceTest {
 			.build();
 
 		// when
-		Long id = chatRoomService.update(chatRoom.getChatRoomId(), request);
+		Long id = chatRoomService.update(chatRoom.getId(), request);
 
 		// then
 		ChatRoom findChatRoom = chatRoomRepository.findById(id)
@@ -150,7 +150,7 @@ class ChatRoomServiceTest {
 		chatRoomRepository.save(chatRoom);
 
 		// when
-		ChatRoomResponseDto findChatRoom = chatRoomService.findById(chatRoom.getChatRoomId());
+		ChatRoomResponseDto findChatRoom = chatRoomService.findById(chatRoom.getId());
 
 		// then
 		assertThat(findChatRoom).extracting("title").isEqualTo("제목입니다.");
@@ -167,7 +167,7 @@ class ChatRoomServiceTest {
 		chatRoomRepository.save(chatRoom);
 
 		// expected
-		assertThatThrownBy(() -> chatRoomService.findById(chatRoom.getChatRoomId() + 1))
+		assertThatThrownBy(() -> chatRoomService.findById(chatRoom.getId() + 1))
 			.isInstanceOf(ChatRoomNotFoundException.class);
 	}
 
@@ -182,10 +182,10 @@ class ChatRoomServiceTest {
 		chatRoomRepository.save(chatRoom);
 
 		// when
-		chatRoomService.delete(chatRoom.getChatRoomId());
+		chatRoomService.delete(chatRoom.getId());
 
 		// then
-		assertThatThrownBy(() -> chatRoomService.findById(chatRoom.getChatRoomId()))
+		assertThatThrownBy(() -> chatRoomService.findById(chatRoom.getId()))
 			.isInstanceOf(ChatRoomNotFoundException.class);
 	}
 

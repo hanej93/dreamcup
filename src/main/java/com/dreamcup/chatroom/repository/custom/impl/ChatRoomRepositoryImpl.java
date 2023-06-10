@@ -14,6 +14,7 @@ import com.dreamcup.chatroom.dto.request.ChatRoomSearchRequestDto;
 import com.dreamcup.chatroom.dto.response.ChatRoomResponseDto;
 import com.dreamcup.chatroom.dto.response.QChatRoomResponseDto;
 import com.dreamcup.chatroom.repository.custom.ChatRoomRepositoryCustom;
+import com.dreamcup.member.entity.QParticipant;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -35,7 +36,7 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepositoryCustom {
                 )
                 .limit(requestDto.getSize())
                 .offset(requestDto.getOffset())
-                .orderBy(chatRoom.chatRoomId.desc())
+                .orderBy(chatRoom.id.desc())
                 .fetch();
     }
 
@@ -44,7 +45,7 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepositoryCustom {
 
 		List<ChatRoomResponseDto> content = jpaQueryFactory
 			.select(new QChatRoomResponseDto(
-				chatRoom.chatRoomId,
+				chatRoom.id,
 				chatRoom.title,
 				chatRoom.creator.nickName,
 				chatRoom.maxUserCount,
@@ -57,7 +58,7 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepositoryCustom {
 			)
 			.limit(requestDto.getSize())
 			.offset(requestDto.getOffset())
-			.orderBy(chatRoom.chatRoomId.desc())
+			.orderBy(chatRoom.id.desc())
 			.fetch();
 
 		Long total = jpaQueryFactory

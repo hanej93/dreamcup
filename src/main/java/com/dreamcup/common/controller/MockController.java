@@ -2,6 +2,7 @@ package com.dreamcup.common.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dreamcup.chatroom.dto.request.ChatRoomSaveRequestDto;
@@ -15,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
-public class HomeController {
+public class MockController {
 
 	private final ChatRoomService chatRoomService;
 	private final ChatService chatService;
@@ -47,19 +48,17 @@ public class HomeController {
 	@PostConstruct
 	public void init() {
 		// 멤버 생성
-		MemberSignupRequestDto requestDto = MemberSignupRequestDto.builder()
-			.username("user")
-			.password("1234")
-			.nickname("user")
-			.build();
-		memberService.signup(requestDto);
+		for (int i = 1; i <= 10; i++) {
+			MemberSignupRequestDto requestDto = MemberSignupRequestDto.builder()
+				.username("user" + i)
+				.password("1234")
+				.nickname("user" + i)
+				.build();
+			memberService.signup(requestDto);
+		}
 
 		// 채팅방 생성
 		for (int i = 1; i <= 100; i++) {
-			// ChatRoom chatRoom = chatRoomService.createChatRoom("제목" + i);
-			// chatService.save("내용" + i, chatRoom);
-			// chatService.save("내요옹" + i, chatRoom);
-
 			ChatRoomSaveRequestDto chatRoomSaveRequestDto = ChatRoomSaveRequestDto.builder()
 				.creator(1L)
 				.rawPassword(String.valueOf(i))
