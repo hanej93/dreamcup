@@ -14,8 +14,8 @@ public class ChatRoomSaveRequestDto {
 
 	@NotBlank(message = "제목을 입력해주세요.")
     private String title;
-	private String rawPassword;
 	private Integer userMaxCount;
 	private Long creator;
+	private boolean isPrivate;
 
 }

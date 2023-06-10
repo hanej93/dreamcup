@@ -3,7 +3,8 @@ package com.dreamcup.chatroom.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.dreamcup.chatroom.dto.request.ChatRoomJoinRequestDto;
+import com.dreamcup.chatroom.dto.request.PrivateChatRoomJoinRequestDto;
+import com.dreamcup.chatroom.dto.request.PublicChatRoomJoinRequestDto;
 import com.dreamcup.chatroom.entity.ChatRoom;
 import com.dreamcup.chatroom.exception.AlreadyParticipantException;
 import com.dreamcup.chatroom.exception.ChatRoomNotFoundException;
@@ -26,7 +27,7 @@ public class ParticipantService {
 	private final ChatRoomParticipantsRepository chatRoomParticipantsRepository;
 
 	@Transactional
-	public void joinChatRoom(ChatRoomJoinRequestDto requestDto) {
+	public void joinPublicChatRoom(PublicChatRoomJoinRequestDto requestDto) {
 		boolean isAlreadyParticipant = chatRoomParticipantsRepository.existsByChatRoomIdAndParticipantId(requestDto.getChatRoomId(),
 			requestDto.getParticipantId());
 
@@ -35,6 +36,28 @@ public class ParticipantService {
 		}
 
 		ChatRoom chatRoom = chatRoomRepository.findById(requestDto.getChatRoomId())
+			.orElseThrow(ChatRoomNotFoundException::new);
+
+		if (chatRoom.isOverMaxUser()) {
+			throw new MaxUserLimitExceededException();
+		}
+
+		Participant participant = participantRepository.findById(requestDto.getParticipantId())
+			.orElseThrow(UserNotFoundException::new);
+
+		chatRoom.addParticipant(participant);
+	}
+
+	@Transactional
+	public void joinPrivateChatRoom(PrivateChatRoomJoinRequestDto requestDto) {
+		boolean isAlreadyParticipant = chatRoomParticipantsRepository.existsByPrivateCodeAndParticipantId(
+			requestDto.getPrivateCode(), requestDto.getParticipantId());
+
+		if (isAlreadyParticipant) {
+			throw new AlreadyParticipantException();
+		}
+
+		ChatRoom chatRoom = chatRoomRepository.findByPrivateCode(requestDto.getPrivateCode())
 			.orElseThrow(ChatRoomNotFoundException::new);
 
 		if (chatRoom.isOverMaxUser()) {

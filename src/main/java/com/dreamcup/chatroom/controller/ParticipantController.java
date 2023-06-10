@@ -7,7 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dreamcup.chatroom.dto.request.ChatRoomJoinRequestDto;
+import com.dreamcup.chatroom.dto.request.PrivateChatRoomJoinRequestDto;
+import com.dreamcup.chatroom.dto.request.PublicChatRoomJoinRequestDto;
 import com.dreamcup.chatroom.service.ParticipantService;
 
 import jakarta.validation.Valid;
@@ -20,9 +21,15 @@ public class ParticipantController {
 
 	private final ParticipantService participantService;
 
-	@PostMapping("/chatRoom/join")
-	public ResponseEntity joinChatRoom(@RequestBody @Valid ChatRoomJoinRequestDto requestDto) {
-		participantService.joinChatRoom(requestDto);
+	@PostMapping("/chatRoom/public-join")
+	public ResponseEntity joinPublicChatRoom(@RequestBody @Valid PublicChatRoomJoinRequestDto requestDto) {
+		participantService.joinPublicChatRoom(requestDto);
+		return new ResponseEntity(HttpStatus.OK);
+	}
+
+	@PostMapping("/chatRoom/private-join")
+	public ResponseEntity joinPrivateChatRoom(@RequestBody @Valid PrivateChatRoomJoinRequestDto requestDto) {
+		participantService.joinPrivateChatRoom(requestDto);
 		return new ResponseEntity(HttpStatus.OK);
 	}
 

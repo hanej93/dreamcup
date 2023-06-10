@@ -1,7 +1,6 @@
 package com.dreamcup.chatroom.service;
 
 import org.springframework.data.domain.Page;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +14,7 @@ import com.dreamcup.chatroom.entity.ChatRoom;
 import com.dreamcup.chatroom.exception.ChatRoomNotFoundException;
 import com.dreamcup.chatroom.repository.ChatRoomRepository;
 import com.dreamcup.chatroom.vo.ChatVo;
+import com.dreamcup.common.util.CommonUtil;
 import com.dreamcup.member.entity.Participant;
 import com.dreamcup.member.exception.UserNotFoundException;
 import com.dreamcup.member.repository.ParticipantRepository;
@@ -26,23 +26,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ChatRoomService {
 
-	private final PasswordEncoder passwordEncoder;
 	private final ChatService chatService;
 	private final ChatRoomRepository chatRoomRepository;
 	private final ParticipantRepository participantRepository;
 
 	@Transactional
 	public Long createChatRoom(ChatRoomSaveRequestDto requestDto) {
-		/**
-		 * todo: 채팅방 생성 로직
-		 * 1. 채팅방 생성
-		 * 2. 채팅방 참여
-		 * -> 채팅방 입장 후 시스템 생성 메시지?
-		 * 3. 시스템 채팅 메시지 발송
-		 */
-
 		ChatRoom chatRoom = convertToChatRoomEntity(requestDto);
 
+		// todo : refactoring
 		ChatVo chatVo = ChatVo.builder()
 			.chatRoomId(chatRoom.getId())
 			.message("채팅방이 생성되었습니다.") // todo: change constraint
@@ -50,7 +42,6 @@ public class ChatRoomService {
 			.senderId(null)
 			.build();
 
-		// chatService.sendMessage(chatVo);
 		Chat chat = chatService.save(chatVo);
 		chatRoom.addChat(chat);
 
@@ -62,19 +53,32 @@ public class ChatRoomService {
 		Participant creator = participantRepository.findById(requestDto.getCreator())
 			.orElseThrow(UserNotFoundException::new);
 
-		String encryptedPassword =
-			requestDto.getRawPassword() == null ? null : passwordEncoder.encode(requestDto.getRawPassword());
-
-		ChatRoom chatRoom = ChatRoom.builder()
+		ChatRoom.ChatRoomBuilder chatRoomBuilder = ChatRoom.builder()
 			.title(requestDto.getTitle())
 			.creator(creator)
-			.maxUserCount(requestDto.getUserMaxCount())
-			.password(encryptedPassword)
-			.build();
+			.maxUserCount(requestDto.getUserMaxCount());
+
+		if (requestDto.isPrivate()) {
+			String privateCode = generateUniquePrivateCode();
+			chatRoomBuilder.privateCode(privateCode);
+		}
+
+		ChatRoom chatRoom = chatRoomBuilder.build();
 
 		chatRoom.addParticipant(creator);
 
 		return chatRoom;
+	}
+
+	private String generateUniquePrivateCode() {
+		String privateCode = CommonUtil.randomAlphaNumeric(6);
+		boolean isDuplicate = chatRoomRepository.existsByPrivateCode(privateCode);
+
+		if (isDuplicate) {
+			return generateUniquePrivateCode();
+		}
+
+		return privateCode;
 	}
 
 	@Transactional

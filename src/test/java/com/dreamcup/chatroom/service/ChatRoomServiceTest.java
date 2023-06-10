@@ -57,7 +57,6 @@ class ChatRoomServiceTest {
 		// given
 		ChatRoomSaveRequestDto request = ChatRoomSaveRequestDto.builder()
 			.title("테스트 제목")
-			.rawPassword("1234")
 			.creator(1L)
 			.userMaxCount(4)
 			.build();

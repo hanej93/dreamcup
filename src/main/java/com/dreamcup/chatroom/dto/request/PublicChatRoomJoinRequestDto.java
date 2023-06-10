@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatRoomJoinRequestDto {
+public class PublicChatRoomJoinRequestDto {
 
 	private Long ChatRoomId;
 	private Long participantId;

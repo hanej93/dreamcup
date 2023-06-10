@@ -34,8 +34,8 @@ public class ChatRoom extends BaseTimeEntity {
 	@Column(length = 100, nullable = false)
 	private String title;
 
-	@Column(nullable = false)
-	private String password;
+	@Column
+	private String privateCode;
 
 	@Column(nullable = false)
 	private Integer maxUserCount;
@@ -54,9 +54,9 @@ public class ChatRoom extends BaseTimeEntity {
 	// private List<DreamCupTemplate> = new ArrayList<>();
 
 	@Builder
-	public ChatRoom(String title, String password, Integer maxUserCount, Participant creator) {
+	public ChatRoom(String title, String privateCode, Integer maxUserCount, Participant creator) {
 		this.title = title;
-		this.password = password;
+		this.privateCode = privateCode;
 		this.maxUserCount = maxUserCount;
 		this.creator = creator;
 	}
