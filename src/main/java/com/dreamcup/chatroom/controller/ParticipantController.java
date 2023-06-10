@@ -22,15 +22,15 @@ public class ParticipantController {
 	private final ParticipantService participantService;
 
 	@PostMapping("/chatRoom/public-join")
-	public ResponseEntity joinPublicChatRoom(@RequestBody @Valid PublicChatRoomJoinRequestDto requestDto) {
-		participantService.joinPublicChatRoom(requestDto);
-		return new ResponseEntity(HttpStatus.OK);
+	public ResponseEntity<Long> joinPublicChatRoom(@RequestBody @Valid PublicChatRoomJoinRequestDto requestDto) {
+		Long id = participantService.joinPublicChatRoom(requestDto);
+		return new ResponseEntity(id, HttpStatus.OK);
 	}
 
 	@PostMapping("/chatRoom/private-join")
-	public ResponseEntity joinPrivateChatRoom(@RequestBody @Valid PrivateChatRoomJoinRequestDto requestDto) {
-		participantService.joinPrivateChatRoom(requestDto);
-		return new ResponseEntity(HttpStatus.OK);
+	public ResponseEntity<Long> joinPrivateChatRoom(@RequestBody @Valid PrivateChatRoomJoinRequestDto requestDto) {
+		Long id = participantService.joinPrivateChatRoom(requestDto);
+		return new ResponseEntity(id, HttpStatus.OK);
 	}
 
 }

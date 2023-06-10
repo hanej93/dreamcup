@@ -27,7 +27,7 @@ public class ParticipantService {
 	private final ChatRoomParticipantsRepository chatRoomParticipantsRepository;
 
 	@Transactional
-	public void joinPublicChatRoom(PublicChatRoomJoinRequestDto requestDto) {
+	public Long joinPublicChatRoom(PublicChatRoomJoinRequestDto requestDto) {
 		boolean isAlreadyParticipant = chatRoomParticipantsRepository.existsByChatRoomIdAndParticipantId(requestDto.getChatRoomId(),
 			requestDto.getParticipantId());
 
@@ -46,10 +46,12 @@ public class ParticipantService {
 			.orElseThrow(UserNotFoundException::new);
 
 		chatRoom.addParticipant(participant);
+
+		return chatRoom.getId();
 	}
 
 	@Transactional
-	public void joinPrivateChatRoom(PrivateChatRoomJoinRequestDto requestDto) {
+	public Long joinPrivateChatRoom(PrivateChatRoomJoinRequestDto requestDto) {
 		boolean isAlreadyParticipant = chatRoomParticipantsRepository.existsByPrivateCodeAndParticipantId(
 			requestDto.getPrivateCode(), requestDto.getParticipantId());
 
@@ -68,6 +70,8 @@ public class ParticipantService {
 			.orElseThrow(UserNotFoundException::new);
 
 		chatRoom.addParticipant(participant);
+
+		return chatRoom.getId();
 	}
 
 }
