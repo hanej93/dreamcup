@@ -72,6 +72,14 @@ public class JwtTokenProvider {
 		return new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
 	}
 
+	public static String getLoginUsername(String token) {
+		Claims claims = Jwts.parser()
+			.setSigningKey(JwtConfigProperties.SECRET)
+			.parseClaimsJws(token).getBody();
+
+		return claims.getSubject();
+	}
+
 	private static LoginUser getLoginUser(String username, String[] splitAuthority) {
 		Member member = Member.builder()
 			.username(username)

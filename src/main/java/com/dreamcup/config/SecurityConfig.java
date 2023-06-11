@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
@@ -18,11 +19,11 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.dreamcup.config.jwt.handler.JwtAccessDeniedHandler;
-import com.dreamcup.config.jwt.handler.JwtAuthenticationEntryPoint;
+import com.dreamcup.config.jwt.config.JwtConfigProperties;
 import com.dreamcup.config.jwt.filter.JwtAuthenticationFilter;
 import com.dreamcup.config.jwt.filter.JwtAuthorizationFilter;
-import com.dreamcup.config.jwt.config.JwtConfigProperties;
+import com.dreamcup.config.jwt.handler.JwtAccessDeniedHandler;
+import com.dreamcup.config.jwt.handler.JwtAuthenticationEntryPoint;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,6 +34,7 @@ public class SecurityConfig {
 
 	private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 	private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+	private final UserDetailsService userDetailsService;
 
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
@@ -88,7 +90,7 @@ public class SecurityConfig {
 		public void configure(HttpSecurity builder) throws Exception {
 			AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
 			builder.addFilter(new JwtAuthenticationFilter(authenticationManager));
-			builder.addFilter(new JwtAuthorizationFilter(authenticationManager));
+			builder.addFilter(new JwtAuthorizationFilter(authenticationManager, userDetailsService));
 			super.configure(builder);
 		}
 	}
