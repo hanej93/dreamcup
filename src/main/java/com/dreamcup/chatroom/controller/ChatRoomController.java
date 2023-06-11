@@ -29,7 +29,7 @@ public class ChatRoomController {
 	private final ChatRoomService chatRoomService;
 
 	// 채팅방 목록 조회
-	@GetMapping("/")
+	@GetMapping
 	public ResponseEntity<Page<ChatRoomResponseDto>> getList(@RequestBody @Valid ChatRoomSearchRequestDto requestDto) {
 		Page<ChatRoomResponseDto> pagedDtos = chatRoomService.getPagedChatRooms(requestDto);
 		return ResponseEntity.ok(pagedDtos);
@@ -42,7 +42,7 @@ public class ChatRoomController {
 	}
 
 	// 채팅방 생성
-	@PostMapping("/")
+	@PostMapping
 	public ResponseEntity<Long> createChatRoom(@RequestBody @Valid ChatRoomSaveRequestDto requestDto) {
 		Long id = chatRoomService.createChatRoom(requestDto);
 		return new ResponseEntity<>(id, HttpStatus.CREATED);
