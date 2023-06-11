@@ -2,15 +2,16 @@ package com.dreamcup.chatroom.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Getter
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatRoomUpdateRequestDto {
+public class ChatRoomLeaveRequestDto {
 
-    private String title;
+	private Long ChatRoomId;
+	private Long participantId;
 
 }

@@ -28,14 +28,12 @@ public class ChatRoomResponseDto {
         this.updatedDate = updatedDate;
     }
 
-    @QueryProjection
-    public ChatRoomResponseDto(String title, LocalDateTime updatedDate) {
-        this.title = title;
-        this.updatedDate = updatedDate;
-    }
-
     public ChatRoomResponseDto(ChatRoom chatRoom) {
+        this.chatRoomId = chatRoom.getId();
         this.title = chatRoom.getTitle();
-        this.updatedDate = chatRoom.getUpdatedDate();
+        this.creatorName = chatRoom.getCreator().getNickname();
+        this.maxUserCount = chatRoom.getMaxUserCount();
+        this.currentUserCount = chatRoom.getParticipants().size();
+        this.updatedDate = chatRoom.getCreatedDate();
     }
 }

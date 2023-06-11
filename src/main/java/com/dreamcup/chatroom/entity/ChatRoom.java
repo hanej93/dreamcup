@@ -44,6 +44,8 @@ public class ChatRoom extends BaseTimeEntity {
 	@JoinColumn(name = "creator")
 	private Participant creator;
 
+	private Boolean isPrivate;
+
 	@OneToMany(mappedBy = "chatRoom", cascade = ALL, orphanRemoval = true)
 	private List<ChatRoomParticipants> participants = new ArrayList<>();
 
@@ -54,11 +56,12 @@ public class ChatRoom extends BaseTimeEntity {
 	// private List<DreamCupTemplate> = new ArrayList<>();
 
 	@Builder
-	public ChatRoom(String title, String privateCode, Integer maxUserCount, Participant creator) {
+	public ChatRoom(String title, String privateCode, Integer maxUserCount, Participant creator, Boolean isPrivate) {
 		this.title = title;
 		this.privateCode = privateCode;
 		this.maxUserCount = maxUserCount;
 		this.creator = creator;
+		this.isPrivate = isPrivate;
 	}
 
 	public void addChat(Chat chat) {

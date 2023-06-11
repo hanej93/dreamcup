@@ -22,4 +22,10 @@ public class WebSocketController {
 		chatService.sendChatMessage(chatVo);
 	}
 
+	// todo : 채팅방 나가기
+	@MessageMapping("/leaveChatRoom")
+	public void leaveChatRoom() {
+
+	}
+
 }

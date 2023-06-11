@@ -23,10 +23,8 @@ class ChatRoomRepositoryTest {
 
     @PersistenceContext
     private EntityManager em;
-
     @Autowired
     private ChatRoomRepository chatRoomRepository;
-
     @AfterEach
     public void cleanAll() {
         chatRoomRepository.deleteAll();
@@ -48,45 +46,6 @@ class ChatRoomRepositoryTest {
 
         List<ChatRoom> chatRooms = chatRoomRepository.findAll();
         assertThat(chatRooms).containsExactly(findChatRoom);
-    }
-
-    @Test
-    @DisplayName("제목으로 검색 페이지 확인")
-    public void searchAndPageTest() {
-        // given
-        ChatRoom chatRoom1 = ChatRoom.builder()
-                .title("제목1입니다.")
-                .build();
-        ChatRoom chatRoom2 = ChatRoom.builder()
-                .title("제목2입니다.")
-                .build();
-        ChatRoom chatRoom3 = ChatRoom.builder()
-                .title("제목11입니다.")
-                .build();
-        ChatRoom chatRoom4 = ChatRoom.builder()
-                .title("제목12입니다.")
-                .build();
-        ChatRoom chatRoom5 = ChatRoom.builder()
-                .title("제목21입니다.")
-                .build();
-        em.persist(chatRoom1);
-        em.persist(chatRoom2);
-        em.persist(chatRoom3);
-        em.persist(chatRoom4);
-        em.persist(chatRoom5);
-
-        ChatRoomSearchRequestDto request = ChatRoomSearchRequestDto.builder()
-                .page(1)
-                .size(2)
-                .schType("title")
-                .keyword("제목1")
-                .build();
-
-        // when
-        List<ChatRoomResponseDto> pagenatedList = chatRoomRepository.getPagenatedList(request);
-
-        // then
-        assertThat(pagenatedList).extracting("title").containsExactly("제목12입니다.", "제목11입니다.");
     }
 
 }

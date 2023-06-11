@@ -21,7 +21,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.dreamcup.chatroom.entity.ChatRoom;
 import com.dreamcup.chatroom.dto.request.ChatRoomSaveRequestDto;
-import com.dreamcup.chatroom.dto.request.ChatRoomUpdateRequestDto;
 import com.dreamcup.chatroom.repository.ChatRoomRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -151,48 +150,4 @@ class ChatRoomControllerTest {
 			.andDo(print());
 	}
 
-	@Test
-	@DisplayName("채팅방 수정")
-	@WithMockUser
-	void update() throws Exception {
-		// given
-		ChatRoom chatRoom = ChatRoom.builder()
-			.title("제목입니다.")
-			.build();
-		chatRoomRepository.save(chatRoom);
-
-		ChatRoomUpdateRequestDto requestDto = ChatRoomUpdateRequestDto.builder()
-			.title("수정 제목")
-			.build();
-
-		String request = objectMapper.writeValueAsString(requestDto);
-
-		// expected
-		mockMvc.perform(MockMvcRequestBuilders.patch("/api/chatRoom/{chatRoomId}", chatRoom.getId())
-				.contentType(APPLICATION_JSON)
-				.content(request)
-			)
-			.andExpect(status().isOk())
-			.andExpect(content().string(String.valueOf(chatRoom.getId())))
-			.andDo(print());
-	}
-
-	@Test
-	@DisplayName("채팅방 삭제")
-	@WithMockUser
-	void delete() throws Exception {
-		// given
-		ChatRoom chatRoom = ChatRoom.builder()
-			.title("제목입니다.")
-			.build();
-		chatRoomRepository.save(chatRoom);
-
-		// expected
-		mockMvc.perform(MockMvcRequestBuilders.delete("/api/chatRoom/{chatRoomId}", chatRoom.getId())
-				.contentType(APPLICATION_JSON)
-			)
-			.andExpect(status().isOk())
-			.andExpect(content().string(String.valueOf(chatRoom.getId())))
-			.andDo(print());
-	}
 }

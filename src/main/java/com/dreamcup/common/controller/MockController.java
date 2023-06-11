@@ -2,7 +2,6 @@ package com.dreamcup.common.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dreamcup.chatroom.dto.request.ChatRoomSaveRequestDto;
@@ -60,7 +59,7 @@ public class MockController {
 		// 채팅방 생성
 		for (int i = 1; i <= 100; i++) {
 			ChatRoomSaveRequestDto chatRoomSaveRequestDto = ChatRoomSaveRequestDto.builder()
-				.creator(1L)
+				.creatorId(1L)
 				.isPrivate(true)
 				.title("제목" + i)
 				.userMaxCount((i % 8) + 1)

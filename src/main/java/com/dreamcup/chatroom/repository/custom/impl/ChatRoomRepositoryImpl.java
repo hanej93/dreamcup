@@ -14,7 +14,6 @@ import com.dreamcup.chatroom.dto.request.ChatRoomSearchRequestDto;
 import com.dreamcup.chatroom.dto.response.ChatRoomResponseDto;
 import com.dreamcup.chatroom.dto.response.QChatRoomResponseDto;
 import com.dreamcup.chatroom.repository.custom.ChatRoomRepositoryCustom;
-import com.dreamcup.member.entity.QParticipant;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -26,19 +25,6 @@ import lombok.RequiredArgsConstructor;
 public class ChatRoomRepositoryImpl implements ChatRoomRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
-
-    @Override
-    public List<ChatRoomResponseDto> getPagenatedList(ChatRoomSearchRequestDto requestDto) {
-        return jpaQueryFactory.select(new QChatRoomResponseDto(chatRoom.title, chatRoom.updatedDate))
-                .from(chatRoom)
-                .where(
-                        keywordContains(requestDto.getSchType(), requestDto.getKeyword())
-                )
-                .limit(requestDto.getSize())
-                .offset(requestDto.getOffset())
-                .orderBy(chatRoom.id.desc())
-                .fetch();
-    }
 
 	@Override
 	public Page<ChatRoomResponseDto> getPagedChatRooms(ChatRoomSearchRequestDto requestDto) {
@@ -54,7 +40,8 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepositoryCustom {
 			))
 			.from(chatRoom)
 			.where(
-				keywordContains(requestDto.getSchType(), requestDto.getKeyword())
+				getKeywordCondition(requestDto.getSchType(), requestDto.getKeyword()),
+				getPublicOnlyCondition(requestDto)
 			)
 			.limit(requestDto.getSize())
 			.offset(requestDto.getOffset())
@@ -65,7 +52,7 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepositoryCustom {
 			.select(chatRoom.count())
 			.from(chatRoom)
 			.where(
-				keywordContains(requestDto.getSchType(), requestDto.getKeyword())
+				getKeywordCondition(requestDto.getSchType(), requestDto.getKeyword())
 			)
 			.fetchOne();
 
@@ -74,10 +61,19 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepositoryCustom {
 		return new PageImpl<>(content, pageable, total);
 	}
 
-	private BooleanExpression keywordContains(String schType, String keyword) {
+	private BooleanExpression getKeywordCondition(String schType, String keyword) {
+		if (!StringUtils.hasText(keyword)) {
+			return null;
+		}
+
 		if ("title".equals(schType)) {
-			return StringUtils.hasText(keyword) ? chatRoom.title.contains(keyword) : null;
+			return chatRoom.title.contains(keyword);
 		}
 		return null;
     }
+
+	private BooleanExpression getPublicOnlyCondition(ChatRoomSearchRequestDto requestDto) {
+		return requestDto.isPublicOnly() ? chatRoom.isPrivate.eq(!requestDto.isPublicOnly()) : null;
+	}
+
 }

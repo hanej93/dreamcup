@@ -16,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.dreamcup.chatroom.dto.request.ChatRoomSaveRequestDto;
 import com.dreamcup.chatroom.dto.request.ChatRoomSearchRequestDto;
-import com.dreamcup.chatroom.dto.request.ChatRoomUpdateRequestDto;
 import com.dreamcup.chatroom.dto.response.ChatRoomResponseDto;
 import com.dreamcup.chatroom.entity.ChatRoom;
 import com.dreamcup.chatroom.exception.ChatRoomNotFoundException;
@@ -57,7 +56,7 @@ class ChatRoomServiceTest {
 		// given
 		ChatRoomSaveRequestDto request = ChatRoomSaveRequestDto.builder()
 			.title("테스트 제목")
-			.creator(1L)
+			.creatorId(1L)
 			.userMaxCount(4)
 			.build();
 
@@ -71,28 +70,6 @@ class ChatRoomServiceTest {
 		ChatRoom findChatRoom = chatRoomRepository.findById(id)
 			.orElseThrow(() -> new IllegalArgumentException("채팅방을 찾을 수 없습니다."));
 		assertThat(findChatRoom).extracting("title").isEqualTo("제목입니다.");
-	}
-
-	@Test
-	@DisplayName("채팅방 제목 수정")
-	void update() {
-		// given
-		ChatRoom chatRoom = ChatRoom.builder()
-			.title("제목입니다.")
-			.build();
-		chatRoomRepository.save(chatRoom);
-
-		ChatRoomUpdateRequestDto request = ChatRoomUpdateRequestDto.builder()
-			.title("수정 제목")
-			.build();
-
-		// when
-		Long id = chatRoomService.update(chatRoom.getId(), request);
-
-		// then
-		ChatRoom findChatRoom = chatRoomRepository.findById(id)
-			.orElseThrow(() -> new IllegalArgumentException("채팅방을 찾을 수 없습니다."));
-		assertThat(findChatRoom).extracting("title").isEqualTo("수정 제목");
 	}
 
 	@Test
@@ -149,7 +126,7 @@ class ChatRoomServiceTest {
 		chatRoomRepository.save(chatRoom);
 
 		// when
-		ChatRoomResponseDto findChatRoom = chatRoomService.findById(chatRoom.getId());
+		ChatRoomResponseDto findChatRoom = chatRoomService.findChatRoomById(chatRoom.getId());
 
 		// then
 		assertThat(findChatRoom).extracting("title").isEqualTo("제목입니다.");
@@ -166,25 +143,7 @@ class ChatRoomServiceTest {
 		chatRoomRepository.save(chatRoom);
 
 		// expected
-		assertThatThrownBy(() -> chatRoomService.findById(chatRoom.getId() + 1))
-			.isInstanceOf(ChatRoomNotFoundException.class);
-	}
-
-	@Test
-	@DisplayName("채팅방 삭제")
-	void delete() {
-		// given
-		saveChatRoomsForTest();
-		ChatRoom chatRoom = ChatRoom.builder()
-			.title("제목입니다.")
-			.build();
-		chatRoomRepository.save(chatRoom);
-
-		// when
-		chatRoomService.delete(chatRoom.getId());
-
-		// then
-		assertThatThrownBy(() -> chatRoomService.findById(chatRoom.getId()))
+		assertThatThrownBy(() -> chatRoomService.findChatRoomById(chatRoom.getId() + 1))
 			.isInstanceOf(ChatRoomNotFoundException.class);
 	}
 

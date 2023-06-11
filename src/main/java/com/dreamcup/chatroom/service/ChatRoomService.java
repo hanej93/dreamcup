@@ -5,13 +5,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.dreamcup.chatroom.code.MessageType;
+import com.dreamcup.chatroom.dto.request.ChatRoomLeaveRequestDto;
 import com.dreamcup.chatroom.dto.request.ChatRoomSaveRequestDto;
 import com.dreamcup.chatroom.dto.request.ChatRoomSearchRequestDto;
-import com.dreamcup.chatroom.dto.request.ChatRoomUpdateRequestDto;
+import com.dreamcup.chatroom.dto.request.PrivateChatRoomJoinRequestDto;
+import com.dreamcup.chatroom.dto.request.PublicChatRoomJoinRequestDto;
 import com.dreamcup.chatroom.dto.response.ChatRoomResponseDto;
 import com.dreamcup.chatroom.entity.Chat;
 import com.dreamcup.chatroom.entity.ChatRoom;
+import com.dreamcup.chatroom.exception.AlreadyParticipantException;
 import com.dreamcup.chatroom.exception.ChatRoomNotFoundException;
+import com.dreamcup.chatroom.exception.MaxUserLimitExceededException;
+import com.dreamcup.chatroom.repository.ChatRoomParticipantsRepository;
 import com.dreamcup.chatroom.repository.ChatRoomRepository;
 import com.dreamcup.chatroom.vo.ChatVo;
 import com.dreamcup.common.util.CommonUtil;
@@ -29,17 +34,30 @@ public class ChatRoomService {
 	private final ChatService chatService;
 	private final ChatRoomRepository chatRoomRepository;
 	private final ParticipantRepository participantRepository;
+	private final ChatRoomParticipantsRepository chatRoomParticipantsRepository;
 
+	public Page<ChatRoomResponseDto> getPagedChatRooms(ChatRoomSearchRequestDto requestDto) {
+		return chatRoomRepository.getPagedChatRooms(requestDto);
+	}
+
+	public ChatRoomResponseDto findChatRoomById(Long id) {
+		ChatRoom chatRoom = chatRoomRepository.findById(id)
+			.orElseThrow(ChatRoomNotFoundException::new);
+		return new ChatRoomResponseDto(chatRoom);
+	}
+
+	// 채팅방 생성
 	@Transactional
 	public Long createChatRoom(ChatRoomSaveRequestDto requestDto) {
-		Participant creator = participantRepository.findById(requestDto.getCreator())
+		Participant creator = participantRepository.findById(requestDto.getCreatorId())
 			.orElseThrow(UserNotFoundException::new);
 
 		ChatRoom chatRoom = ChatRoom.builder()
 			.title(requestDto.getTitle())
 			.creator(creator)
 			.maxUserCount(requestDto.getUserMaxCount())
-			.privateCode(requestDto.isPrivate() ? generateUniquePrivateCode() : null)
+			.privateCode(generateUniquePrivateCode())
+			.isPrivate(requestDto.isPrivate())
 			.build();
 
 		chatRoom.addParticipant(creator);
@@ -69,36 +87,61 @@ public class ChatRoomService {
 	}
 
 	@Transactional
-	public Long update(Long id, ChatRoomUpdateRequestDto requestDto) {
-		ChatRoom chatRoom = chatRoomRepository.findById(id)
-				.orElseThrow(ChatRoomNotFoundException::new);
+	public Long joinPublicChatRoom(PublicChatRoomJoinRequestDto requestDto) {
+		boolean isAlreadyParticipant = chatRoomParticipantsRepository.existsByChatRoomIdAndParticipantId(requestDto.getChatRoomId(),
+			requestDto.getParticipantId());
 
-		chatRoom.update(requestDto.getTitle());
+		if (isAlreadyParticipant) {
+			throw new AlreadyParticipantException();
+		}
 
-		return id;
-	}
+		ChatRoom chatRoom = chatRoomRepository.findById(requestDto.getChatRoomId())
+			.orElseThrow(ChatRoomNotFoundException::new);
 
-	public Page<ChatRoomResponseDto> getPagedChatRooms(ChatRoomSearchRequestDto requestDto) {
-		return chatRoomRepository.getPagedChatRooms(requestDto);
-	}
+		if (chatRoom.isOverMaxUser()) {
+			throw new MaxUserLimitExceededException();
+		}
 
-	public ChatRoomResponseDto findById(Long id) {
-		ChatRoom chatRoom = chatRoomRepository.findById(id)
-				.orElseThrow(ChatRoomNotFoundException::new);
-		return new ChatRoomResponseDto(chatRoom);
+		Participant participant = participantRepository.findById(requestDto.getParticipantId())
+			.orElseThrow(UserNotFoundException::new);
+
+		chatRoom.addParticipant(participant);
+
+		return chatRoom.getId();
 	}
 
 	@Transactional
-	public void delete(Long id) {
-		ChatRoom chatRoom = chatRoomRepository.findById(id)
-				.orElseThrow();
-		chatRoomRepository.delete(chatRoom);
+	public Long joinPrivateChatRoom(PrivateChatRoomJoinRequestDto requestDto) {
+		boolean isAlreadyParticipant = chatRoomParticipantsRepository.existsByPrivateCodeAndParticipantId(
+			requestDto.getPrivateCode(), requestDto.getParticipantId());
+
+		if (isAlreadyParticipant) {
+			throw new AlreadyParticipantException();
+		}
+
+		ChatRoom chatRoom = chatRoomRepository.findByPrivateCode(requestDto.getPrivateCode())
+			.orElseThrow(ChatRoomNotFoundException::new);
+
+		if (chatRoom.isOverMaxUser()) {
+			throw new MaxUserLimitExceededException();
+		}
+
+		Participant participant = participantRepository.findById(requestDto.getParticipantId())
+			.orElseThrow(UserNotFoundException::new);
+
+		chatRoom.addParticipant(participant);
+
+		return chatRoom.getId();
 	}
 
-	// todo : delete me (for test)
 	@Transactional
-	public ChatRoom createChatRoom(String title) {
-		return chatRoomRepository.save(new ChatRoom(title));
+	public void leaveChatRoom(ChatRoomLeaveRequestDto requestDto) {
+		ChatRoom chatRoom = chatRoomRepository.findById(requestDto.getChatRoomId())
+			.orElseThrow(ChatRoomNotFoundException::new);
+		Participant participant = participantRepository.findById(requestDto.getParticipantId())
+			.orElseThrow(UserNotFoundException::new);
+
+		chatRoom.removeParticipant(participant);
 	}
 
 }

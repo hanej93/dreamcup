@@ -27,21 +27,21 @@
                 </div>
                 <div class="input-group mt-3">
                     <div class="me-5 d-flex align-self-center">채팅방 아이디</div>
-                    <input type="text" id="chatRoomUid" class="form-control" value="12345" disabled />
+                    <input type="text" id="chatRoomId" class="form-control" value="100" disabled />
                 </div>
             </div>
         </div>
     </div>
 </body>
 <script>
-    var stompClient = null;
+    let stompClient = null;
 
     function connect() {
-        var socket = new SockJS('/ws');
+        let socket = new SockJS('/ws');
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function(frame) {
             console.log('Connected: ' + frame);
-            stompClient.subscribe('/exchange/chat.exchange/message.12345', function(message) {
+            stompClient.subscribe('/exchange/chat.exchange/message.100', function(message) {
                 console.log(`<<< message: ${message}`)
                 showMessage(JSON.parse(message.body));
             });
@@ -58,11 +58,12 @@
     function sendMessage() {
         let messageContent = document.getElementById('message').value;
         let sender = document.getElementById('sender').value;
-        let chatRoomUid = document.getElementById('chatRoomUid').value;
+        let chatRoomId = document.getElementById('chatRoomId').value;
         let chatVo = {
-            chatRoomUid: chatRoomUid,
-            sender: sender,
-            content: messageContent,
+            chatRoomId: chatRoomId,
+            senderId: sender,
+            message: messageContent,
+            messageType: "MEMBER"
         };
         stompClient.send("/pub/message", {}, JSON.stringify(chatVo));
     }
@@ -71,7 +72,7 @@
         let messageArea = document.getElementById('messageArea');
         let messageElement = document.createElement('div');
         messageElement.classList.add('alert', 'alert-primary');
-        messageElement.innerHTML = '<strong>' + message.sender + '</strong>: ' + message.content;
+        messageElement.innerHTML = '<strong>' + message.senderId + '</strong>: ' + message.message;
         messageArea.appendChild(messageElement);
     }
 
