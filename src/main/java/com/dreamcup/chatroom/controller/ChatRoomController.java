@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dreamcup.chatroom.dto.request.ChatRoomLeaveRequestDto;
 import com.dreamcup.chatroom.dto.request.ChatRoomSaveRequestDto;
 import com.dreamcup.chatroom.dto.request.ChatRoomSearchRequestDto;
 import com.dreamcup.chatroom.dto.request.PrivateChatRoomJoinRequestDto;
@@ -61,9 +62,10 @@ public class ChatRoomController {
 		return new ResponseEntity(id, HttpStatus.OK);
 	}
 
+	// 채팅방 나가기
 	@PostMapping("/leave")
-	public ResponseEntity leaveChatRoom() {
-		System.out.println("ChatRoomController.leaveChatRoom");
+	public ResponseEntity leaveChatRoom(@RequestBody @Valid ChatRoomLeaveRequestDto requestDto) {
+		chatRoomService.leaveChatRoom(requestDto);
 		return new ResponseEntity(HttpStatus.OK);
 	}
 
