@@ -65,7 +65,7 @@ class ChatRoomControllerTest {
 		String request = objectMapper.writeValueAsString(requestDto);
 
 		// expected
-		mockMvc.perform(MockMvcRequestBuilders.post("/api/chatRoom")
+		mockMvc.perform(MockMvcRequestBuilders.post("/api/chat-rooms")
 			.contentType(APPLICATION_JSON)
 			.content(request)
 		)
@@ -84,7 +84,7 @@ class ChatRoomControllerTest {
 		String request = objectMapper.writeValueAsString(requestDto);
 
 		// expected
-		mockMvc.perform(MockMvcRequestBuilders.post("/api/chatRoom")
+		mockMvc.perform(MockMvcRequestBuilders.post("/api/chat-rooms")
 				.contentType(APPLICATION_JSON)
 				.content(request)
 			)
@@ -106,7 +106,7 @@ class ChatRoomControllerTest {
 		chatRoomRepository.save(chatRoom);
 
 		// expected
-		mockMvc.perform(MockMvcRequestBuilders.get("/api/chatRoom/{chatRoomId}", chatRoom.getId()))
+		mockMvc.perform(MockMvcRequestBuilders.get("/api/chat-rooms/{chatRoomId}", chatRoom.getId()))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.title").value(chatRoom.getTitle()))
 			.andDo(print());
@@ -124,7 +124,7 @@ class ChatRoomControllerTest {
 		chatRoomRepository.save(chatRoom);
 
 		// expected
-		mockMvc.perform(MockMvcRequestBuilders.get("/api/chatRoom/{chatRoomId}", chatRoom.getId() + 1))
+		mockMvc.perform(MockMvcRequestBuilders.get("/api/chat-rooms/{chatRoomId}", chatRoom.getId() + 1))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$.code").value("404"))
 			.andDo(print());
@@ -138,7 +138,7 @@ class ChatRoomControllerTest {
 		saveChatRoomsForTest();
 
 		// expected
-		mockMvc.perform(MockMvcRequestBuilders.get("/api/chatRoom")
+		mockMvc.perform(MockMvcRequestBuilders.get("/api/chat-rooms")
 				.param("page", "1")
 				.param("size", "5")
 				.param("schType", "title")

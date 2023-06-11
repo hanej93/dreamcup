@@ -4,7 +4,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,44 +21,50 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/chat-rooms")
 @RequiredArgsConstructor
 public class ChatRoomController {
 
 	private final ChatRoomService chatRoomService;
 
 	// 채팅방 목록 조회
-	@GetMapping("/chatRoom")
+	@GetMapping("/")
 	public ResponseEntity<Page<ChatRoomResponseDto>> getList(@RequestBody @Valid ChatRoomSearchRequestDto requestDto) {
 		Page<ChatRoomResponseDto> pagedDtos = chatRoomService.getPagedChatRooms(requestDto);
 		return ResponseEntity.ok(pagedDtos);
 	}
 
-	@GetMapping("/chatRoom/{chatRoomId}")
+	@GetMapping("/{chatRoomId}")
 	public ResponseEntity<ChatRoomResponseDto> get(@PathVariable Long chatRoomId) {
 		ChatRoomResponseDto response = chatRoomService.findChatRoomById(chatRoomId);
 		return ResponseEntity.ok(response);
 	}
 
 	// 채팅방 생성
-	@PostMapping("/chatRoom")
+	@PostMapping("/")
 	public ResponseEntity<Long> createChatRoom(@RequestBody @Valid ChatRoomSaveRequestDto requestDto) {
 		Long id = chatRoomService.createChatRoom(requestDto);
 		return new ResponseEntity<>(id, HttpStatus.CREATED);
 	}
 
 	// 채팅방 입장(chatRoomId, participantId)
-	@PostMapping("/chatRoom/public-join")
+	@PostMapping("/public-join")
 	public ResponseEntity<Long> joinPublicChatRoom(@RequestBody @Valid PublicChatRoomJoinRequestDto requestDto) {
 		Long id = chatRoomService.joinPublicChatRoom(requestDto);
 		return new ResponseEntity(id, HttpStatus.OK);
 	}
 
 	// 채팅방 입장(privateCode, participantId)
-	@PostMapping("/chatRoom/private-join")
+	@PostMapping("/private-join")
 	public ResponseEntity<Long> joinPrivateChatRoom(@RequestBody @Valid PrivateChatRoomJoinRequestDto requestDto) {
 		Long id = chatRoomService.joinPrivateChatRoom(requestDto);
 		return new ResponseEntity(id, HttpStatus.OK);
+	}
+
+	@PostMapping("/leave")
+	public ResponseEntity leaveChatRoom() {
+		System.out.println("ChatRoomController.leaveChatRoom");
+		return new ResponseEntity(HttpStatus.OK);
 	}
 
 }
