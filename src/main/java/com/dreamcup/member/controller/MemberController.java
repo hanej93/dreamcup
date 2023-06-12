@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -54,7 +55,7 @@ public class MemberController {
 	}
 
 	@GetMapping("/friendship")
-	public ResponseEntity<Page<FriendsResponseDto>> getFriendList(@RequestBody FriendsSearchRequestDto requestDto) {
+	public ResponseEntity<Page<FriendsResponseDto>> getFriendList(@ModelAttribute FriendsSearchRequestDto requestDto) {
 		Page<FriendsResponseDto> friends = memberService.getFriendList(requestDto);
 		return new ResponseEntity(friends, HttpStatus.OK);
 	}
