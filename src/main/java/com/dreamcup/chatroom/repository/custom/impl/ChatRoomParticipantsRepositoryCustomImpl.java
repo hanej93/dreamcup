@@ -3,6 +3,11 @@ package com.dreamcup.chatroom.repository.custom.impl;
 import static com.dreamcup.chatroom.entity.QChatRoom.*;
 import static com.dreamcup.chatroom.entity.QChatRoomParticipants.*;
 
+import java.util.List;
+
+import com.dreamcup.chatroom.dto.response.ParticipantsInChatRoomResponseDto;
+import com.dreamcup.chatroom.dto.response.QParticipantsInChatRoomResponseDto;
+import com.dreamcup.chatroom.entity.QChatRoomParticipants;
 import com.dreamcup.chatroom.repository.custom.ChatRoomParticipantsRepositoryCustom;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -23,5 +28,19 @@ public class ChatRoomParticipantsRepositoryCustomImpl implements ChatRoomPartici
 				.and(chatRoomParticipants.participant.id.eq(participantId))
 			)
 			.fetchFirst() != null;
+	}
+
+	@Override
+	public List<ParticipantsInChatRoomResponseDto> getParticipantsByChatRoomId(Long chatRoomId) {
+		return jpaQueryFactory.select(new QParticipantsInChatRoomResponseDto(
+				chatRoomParticipants.participant.id,
+				chatRoomParticipants.participant.nickname
+			))
+			.from(chatRoomParticipants)
+			.where(
+				chatRoomParticipants.chatRoom.id.eq(chatRoomId)
+			)
+			.orderBy(chatRoomParticipants.id.asc())
+			.fetch();
 	}
 }

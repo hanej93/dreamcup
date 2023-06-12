@@ -1,5 +1,7 @@
 package com.dreamcup.chatroom.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,9 +10,11 @@ import com.dreamcup.chatroom.code.MessageType;
 import com.dreamcup.chatroom.dto.request.ChatRoomLeaveRequestDto;
 import com.dreamcup.chatroom.dto.request.ChatRoomSaveRequestDto;
 import com.dreamcup.chatroom.dto.request.ChatRoomSearchRequestDto;
+import com.dreamcup.chatroom.dto.request.ParticipantsInChatRoomRequestDto;
 import com.dreamcup.chatroom.dto.request.PrivateChatRoomJoinRequestDto;
 import com.dreamcup.chatroom.dto.request.PublicChatRoomJoinRequestDto;
 import com.dreamcup.chatroom.dto.response.ChatRoomResponseDto;
+import com.dreamcup.chatroom.dto.response.ParticipantsInChatRoomResponseDto;
 import com.dreamcup.chatroom.entity.Chat;
 import com.dreamcup.chatroom.entity.ChatRoom;
 import com.dreamcup.chatroom.exception.AlreadyParticipantException;
@@ -144,4 +148,8 @@ public class ChatRoomService {
 		chatRoom.removeParticipant(participant);
 	}
 
+	public List<ParticipantsInChatRoomResponseDto> findMemberInChatRoom(ParticipantsInChatRoomRequestDto requestDto) {
+		System.out.println("requestDto = " + requestDto);
+		return chatRoomParticipantsRepository.getParticipantsByChatRoomId(requestDto.getChatRoomId());
+	}
 }

@@ -1,5 +1,7 @@
 package com.dreamcup.chatroom.controller;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dreamcup.chatroom.dto.request.ChatRoomLeaveRequestDto;
 import com.dreamcup.chatroom.dto.request.ChatRoomSaveRequestDto;
 import com.dreamcup.chatroom.dto.request.ChatRoomSearchRequestDto;
+import com.dreamcup.chatroom.dto.request.ParticipantsInChatRoomRequestDto;
 import com.dreamcup.chatroom.dto.request.PrivateChatRoomJoinRequestDto;
 import com.dreamcup.chatroom.dto.request.PublicChatRoomJoinRequestDto;
 import com.dreamcup.chatroom.dto.response.ChatRoomResponseDto;
+import com.dreamcup.chatroom.dto.response.ParticipantsInChatRoomResponseDto;
 import com.dreamcup.chatroom.service.ChatRoomService;
 
 import jakarta.validation.Valid;
@@ -35,6 +39,7 @@ public class ChatRoomController {
 		return ResponseEntity.ok(pagedDtos);
 	}
 
+	// 채팅방 정보 단건 조회
 	@GetMapping("/{chatRoomId}")
 	public ResponseEntity<ChatRoomResponseDto> get(@PathVariable Long chatRoomId) {
 		ChatRoomResponseDto response = chatRoomService.findChatRoomById(chatRoomId);
@@ -67,6 +72,13 @@ public class ChatRoomController {
 	public ResponseEntity leaveChatRoom(@RequestBody @Valid ChatRoomLeaveRequestDto requestDto) {
 		chatRoomService.leaveChatRoom(requestDto);
 		return new ResponseEntity(HttpStatus.OK);
+	}
+
+	// 채팅방 참가자 목록
+	@GetMapping("/members")
+	public ResponseEntity<List<ParticipantsInChatRoomResponseDto>> getMembersInChatRoom(@RequestBody ParticipantsInChatRoomRequestDto requestDto) {
+		List<ParticipantsInChatRoomResponseDto> dtos = chatRoomService.findMemberInChatRoom(requestDto);
+		return new ResponseEntity(dtos, HttpStatus.OK);
 	}
 
 }
