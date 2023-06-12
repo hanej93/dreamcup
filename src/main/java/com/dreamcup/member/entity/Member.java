@@ -7,7 +7,6 @@ import java.util.Set;
 
 import com.dreamcup.member.code.AuthorityEnum;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -34,6 +33,9 @@ public class Member extends Participant {
 	public boolean isAnonymous() {
 		return false;
 	}
+
+	@OneToMany(mappedBy = "friend", cascade = ALL, orphanRemoval = true)
+	private Set<Friendship> friends = new HashSet<>();
 
 	@Builder
 	public Member(String nickname, String nameTag, String username, String password) {

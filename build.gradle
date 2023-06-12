@@ -69,3 +69,8 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+def querydslSrcDir = 'src/main/generated'
+clean {
+	delete file(querydslSrcDir)
+}

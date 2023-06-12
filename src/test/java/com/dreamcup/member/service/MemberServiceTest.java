@@ -2,6 +2,9 @@ package com.dreamcup.member.service;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,9 +13,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.dreamcup.member.dto.request.MemberSignupRequestDto;
+import com.dreamcup.member.entity.Friendship;
 import com.dreamcup.member.entity.Member;
 import com.dreamcup.member.code.AuthorityEnum;
 import com.dreamcup.member.exception.DuplicateMemberException;
+import com.dreamcup.member.repository.FriendshipRepository;
 import com.dreamcup.member.repository.MemberRepository;
 
 @SpringBootTest

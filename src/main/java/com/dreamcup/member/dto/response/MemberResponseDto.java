@@ -1,4 +1,4 @@
-package com.dreamcup.config.jwt.dto;
+package com.dreamcup.member.dto.response;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -6,12 +6,14 @@ import java.util.stream.Collectors;
 import com.dreamcup.member.code.AuthorityEnum;
 import com.dreamcup.member.entity.Member;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
-public class LoginResponseDto {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class MemberResponseDto {
 
 	private Long memberId;
 	private String username;
@@ -19,13 +21,12 @@ public class LoginResponseDto {
 	private String nameTag;
 	private Set<AuthorityEnum> authorities;
 
-	public LoginResponseDto(Member member) {
+	public MemberResponseDto(Member member) {
 		this.memberId = member.getId();
 		this.username = member.getUsername();
 		this.nickname = member.getNickname();
 		this.nameTag = member.getNameTag();
 		this.authorities = member.getAuthorities().stream()
-			.map(auth -> auth.getAuthority())
-			.collect(Collectors.toSet());
+			.map(auth -> auth.getAuthority()).collect(Collectors.toSet());
 	}
 }
