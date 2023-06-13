@@ -61,7 +61,7 @@ public class ChatRoomService {
 			.creator(creator)
 			.maxUserCount(requestDto.getUserMaxCount())
 			.privateCode(generateUniquePrivateCode())
-			.isPrivate(requestDto.isPrivate())
+			.isPrivate(requestDto.isPrivateRoom())
 			.build();
 
 		chatRoom.addParticipant(creator);
@@ -149,7 +149,6 @@ public class ChatRoomService {
 	}
 
 	public List<ParticipantsInChatRoomResponseDto> findMemberInChatRoom(ParticipantsInChatRoomRequestDto requestDto) {
-		System.out.println("requestDto = " + requestDto);
 		return chatRoomParticipantsRepository.getParticipantsByChatRoomId(requestDto.getChatRoomId());
 	}
 }

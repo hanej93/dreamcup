@@ -73,7 +73,7 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepositoryCustom {
     }
 
 	private BooleanExpression getPublicOnlyCondition(ChatRoomSearchRequestDto requestDto) {
-		return requestDto.isPublicOnly() ? chatRoom.isPrivate.eq(!requestDto.isPublicOnly()) : null;
+		return requestDto.isOnlyPublic() ? chatRoom.isPrivate.eq(!requestDto.isOnlyPublic()) : null;
 	}
 
 }

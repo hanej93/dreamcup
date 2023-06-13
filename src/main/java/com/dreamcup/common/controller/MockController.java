@@ -60,7 +60,7 @@ public class MockController {
 		for (int i = 1; i <= 100; i++) {
 			ChatRoomSaveRequestDto chatRoomSaveRequestDto = ChatRoomSaveRequestDto.builder()
 				.creatorId(1L)
-				.isPrivate(true)
+				.privateRoom(true)
 				.title("제목" + i)
 				.userMaxCount((i % 8) + 1)
 				.build();
