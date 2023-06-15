@@ -1,11 +1,6 @@
 package com.dreamcup.config.auth;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,7 +22,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 	@Transactional
 	public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
 		Member member = userRepository.findWithAuthoritiesByUsername(username)
-			.orElseThrow(() -> new UsernameNotFoundException(username + " -> 데이터베이스에서 찾을 수 없습니다."));
+			.orElseThrow(() -> new InternalAuthenticationServiceException(username + " -> 데이터베이스에서 찾을 수 없습니다."));
 
 		return new LoginUser(member);
 	}
