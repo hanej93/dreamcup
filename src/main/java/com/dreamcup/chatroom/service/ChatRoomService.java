@@ -17,6 +17,7 @@ import com.dreamcup.chatroom.dto.response.ChatRoomResponseDto;
 import com.dreamcup.chatroom.dto.response.ParticipantsInChatRoomResponseDto;
 import com.dreamcup.chatroom.entity.Chat;
 import com.dreamcup.chatroom.entity.ChatRoom;
+import com.dreamcup.chatroom.entity.ChatRoomParticipants;
 import com.dreamcup.chatroom.exception.AlreadyParticipantException;
 import com.dreamcup.chatroom.exception.ChatRoomNotFoundException;
 import com.dreamcup.chatroom.exception.MaxUserLimitExceededException;
@@ -25,6 +26,7 @@ import com.dreamcup.chatroom.repository.ChatRoomRepository;
 import com.dreamcup.chatroom.vo.ChatVo;
 import com.dreamcup.common.util.CommonUtil;
 import com.dreamcup.member.entity.Participant;
+import com.dreamcup.member.exception.ChatRoomParticipantNotFoundException;
 import com.dreamcup.member.exception.UserNotFoundException;
 import com.dreamcup.member.repository.ParticipantRepository;
 
@@ -145,7 +147,10 @@ public class ChatRoomService {
 		Participant participant = participantRepository.findById(requestDto.getParticipantId())
 			.orElseThrow(UserNotFoundException::new);
 
-		chatRoom.removeParticipant(participant);
+		ChatRoomParticipants chatRoomParticipants = chatRoomParticipantsRepository.findByChatRoomAndParticipant(chatRoom, participant)
+			.orElseThrow(ChatRoomParticipantNotFoundException::new);
+
+		chatRoom.removeParticipant(chatRoomParticipants);
 	}
 
 	public List<ParticipantsInChatRoomResponseDto> findMemberInChatRoom(ParticipantsInChatRoomRequestDto requestDto) {

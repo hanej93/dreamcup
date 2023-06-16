@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ChatRoomLeaveRequestDto {
 
-	private Long ChatRoomId;
+	private Long chatRoomId;
 	private Long participantId;
 
 }
