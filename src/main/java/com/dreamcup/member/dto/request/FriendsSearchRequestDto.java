@@ -20,6 +20,7 @@ public class FriendsSearchRequestDto {
 	@Builder.Default
 	private Integer size = 10;
 	private Long memberId;
+	private Boolean accepted;
 
 	public long getOffset() {
 		return (long) max(0, page) * min(size, MAX_SIZE);

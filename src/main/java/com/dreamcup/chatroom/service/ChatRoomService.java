@@ -68,6 +68,8 @@ public class ChatRoomService {
 
 		chatRoom.addParticipant(creator);
 
+		chatRoomRepository.save(chatRoom);
+
 		ChatVo chatVo = ChatVo.builder()
 			.chatRoomId(chatRoom.getId())
 			.message("채팅방이 생성되었습니다.")
@@ -77,7 +79,6 @@ public class ChatRoomService {
 		Chat chat = chatService.save(chatVo);
 		chatRoom.addChat(chat);
 
-		chatRoomRepository.save(chatRoom);
 		return chatRoom.getId();
 	}
 

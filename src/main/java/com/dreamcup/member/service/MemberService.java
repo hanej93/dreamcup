@@ -105,13 +105,21 @@ public class MemberService {
 		}
 
 		friendShip.setAccepted(true);
+		
+		Friendship reverseFriendship = Friendship.builder()
+			.member(friendShip.getFriend())
+			.friend(friendShip.getMember())
+			.accepted(true)
+			.build();
+		friendShipRepository.save(reverseFriendship);
+
 		// todo: notice 발송
 
 		return friendShip.getId();
 	}
 
-	// 친구 목록 조회(요청받은 친구)
-	public Page<FriendsResponseDto> getFriendList(FriendsSearchRequestDto requestDto) {
+	// 친구 목록 조회
+	public Page<FriendsResponseDto> getFriends(FriendsSearchRequestDto requestDto) {
 		return friendShipRepository.findPagedFriends(requestDto);
 	}
 

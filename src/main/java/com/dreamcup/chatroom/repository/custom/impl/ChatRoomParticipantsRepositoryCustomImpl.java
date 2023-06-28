@@ -7,7 +7,6 @@ import java.util.List;
 
 import com.dreamcup.chatroom.dto.response.ParticipantsInChatRoomResponseDto;
 import com.dreamcup.chatroom.dto.response.QParticipantsInChatRoomResponseDto;
-import com.dreamcup.chatroom.entity.QChatRoomParticipants;
 import com.dreamcup.chatroom.repository.custom.ChatRoomParticipantsRepositoryCustom;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 

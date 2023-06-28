@@ -14,6 +14,7 @@ import com.dreamcup.member.dto.request.FriendsSearchRequestDto;
 import com.dreamcup.member.dto.response.FriendsResponseDto;
 import com.dreamcup.member.dto.response.QFriendsResponseDto;
 import com.dreamcup.member.repository.custom.FriendshipRepositoryCustom;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
@@ -34,7 +35,7 @@ public class FriendshipRepositoryImpl implements FriendshipRepositoryCustom {
 			.from(friendship)
 			.join(friendship.friend, member)
 			.where(
-				friendship.accepted.eq(true)
+				getAcceptedCondition(requestDto.getAccepted())
 			)
 			.limit(requestDto.getSize())
 			.offset(requestDto.getOffset())
@@ -52,6 +53,14 @@ public class FriendshipRepositoryImpl implements FriendshipRepositoryCustom {
 		Pageable pageable = PageRequest.of(requestDto.getPage(), requestDto.getSize());
 
 		return new PageImpl<>(content, pageable, total);
+	}
+
+	private BooleanExpression getAcceptedCondition(Boolean accepted) {
+		if (accepted == null) {
+			return null;
+		}
+
+		return friendship.accepted.eq(accepted);
 	}
 
 }

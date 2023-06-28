@@ -56,7 +56,7 @@ public class MemberController {
 
 	@GetMapping("/friendship")
 	public ResponseEntity<Page<FriendsResponseDto>> getFriendList(@ModelAttribute FriendsSearchRequestDto requestDto) {
-		Page<FriendsResponseDto> friends = memberService.getFriendList(requestDto);
+		Page<FriendsResponseDto> friends = memberService.getFriends(requestDto);
 		return new ResponseEntity(friends, HttpStatus.OK);
 	}
 
