@@ -3,24 +3,18 @@ package com.dreamcup.member.dto.request;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class MemberSignupRequestDto {
+@AllArgsConstructor
+public class ValidNicknameRequestDto {
 
-	@NotEmpty
-	private String username;
-	@NotEmpty
-	private String password;
 	@NotEmpty
 	private String nickname;
-	@NotEmpty
-	private String nameTag;
 
+	@NotEmpty
+	private String tagName;
 }

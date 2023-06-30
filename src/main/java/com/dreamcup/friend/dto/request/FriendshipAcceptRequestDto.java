@@ -1,4 +1,4 @@
-package com.dreamcup.member.dto.request;
+package com.dreamcup.friend.dto.request;
 
 import lombok.Data;
 

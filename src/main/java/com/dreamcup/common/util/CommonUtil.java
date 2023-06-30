@@ -16,4 +16,14 @@ public class CommonUtil {
 		return sb.toString();
 	}
 
+	public static String randomNumeric(int length) {
+		StringBuilder sb = new StringBuilder();
+		Random random = new Random();
+		for (int i = 0; i < length; i++) {
+			int randomNum = random.nextInt(10);
+			sb.append(randomNum);
+		}
+		return sb.toString();
+	}
+
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -29,12 +29,28 @@
                     <div class="me-5 d-flex align-self-center">채팅방 아이디</div>
                     <input type="text" id="chatRoomId" class="form-control" value="100" disabled />
                 </div>
+                <div class="mt-5">
+                    <button type="button" id="sub-btn">구독버튼</button>
+                    <input type="text" id="sub-id" />
+                </div>
             </div>
         </div>
     </div>
 </body>
 <script>
     let stompClient = null;
+
+    $("#sub-btn").on("click", () => {
+        let socket = new SockJS('/ws');
+        let txt = $("#sub-id").val();
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function(frame) {
+            console.log('Connected: ' + frame);
+            stompClient.subscribe('/exchange/friend.exchange/message.' + txt, function(message) {
+                console.log(`<<< message: ${message}`);
+            });
+        });
+    });
 
     function connect() {
         let socket = new SockJS('/ws');

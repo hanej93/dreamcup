@@ -1,4 +1,4 @@
-package com.dreamcup.member.exception;
+package com.dreamcup.friend.exception;
 
 import org.springframework.http.HttpStatus;
 

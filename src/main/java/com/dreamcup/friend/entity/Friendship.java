@@ -1,6 +1,7 @@
-package com.dreamcup.member.entity;
+package com.dreamcup.friend.entity;
 
 import com.dreamcup.common.entity.common.BaseTimeEntity;
+import com.dreamcup.member.entity.Member;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

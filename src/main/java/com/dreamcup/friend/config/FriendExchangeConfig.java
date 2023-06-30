@@ -1,4 +1,4 @@
-package com.dreamcup.websocket.config;
+package com.dreamcup.friend.config;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -11,8 +11,8 @@ import org.springframework.context.annotation.Configuration;
 public class FriendExchangeConfig {
 
 	public static final String FRIEND_EXCHANGE_NAME = "friend.exchange";
-	public static final String FRIEND_STATUS_ROUTING_KEY = "friendStatus";
-	public static final String FRIEND_STATUS_QUEUE_NAME = "friendStatus.queue";
+	public static final String FRIEND_MESSAGE_ROUTING_KEY = "message.*";
+	public static final String FRIEND_MESSAGE_QUEUE_NAME = "message.queue";
 
 	@Bean
 	public TopicExchange friendExchange() {
@@ -20,13 +20,13 @@ public class FriendExchangeConfig {
 	}
 
 	@Bean
-	public Queue friendStatusQueue() {
-		return new Queue(FRIEND_STATUS_QUEUE_NAME, true);
+	public Queue friendMessageQueue() {
+		return new Queue(FRIEND_MESSAGE_QUEUE_NAME, true);
 	}
 
 	@Bean
-	public Binding friendStatusBinding(Queue friendStatusQueue, TopicExchange friendExchange) {
-		return BindingBuilder.bind(friendStatusQueue).to(friendExchange).with(FRIEND_STATUS_ROUTING_KEY);
+	public Binding friendMessageBinding(Queue friendMessageQueue, TopicExchange friendExchange) {
+		return BindingBuilder.bind(friendMessageQueue).to(friendExchange).with(FRIEND_MESSAGE_ROUTING_KEY);
 	}
 
 }

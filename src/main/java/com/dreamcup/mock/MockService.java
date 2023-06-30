@@ -5,7 +5,6 @@ import java.util.Locale;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.dreamcup.chatroom.code.MessageType;
 import com.dreamcup.chatroom.dto.request.ChatRoomSaveRequestDto;
@@ -15,9 +14,9 @@ import com.dreamcup.chatroom.service.ChatService;
 import com.dreamcup.chatroom.vo.ChatVo;
 import com.dreamcup.member.code.AuthorityEnum;
 import com.dreamcup.member.dto.request.MemberSignupRequestDto;
-import com.dreamcup.member.entity.Friendship;
+import com.dreamcup.friend.entity.Friendship;
 import com.dreamcup.member.entity.Member;
-import com.dreamcup.member.repository.FriendshipRepository;
+import com.dreamcup.friend.repository.FriendshipRepository;
 import com.dreamcup.member.repository.MemberRepository;
 import com.dreamcup.member.service.MemberService;
 import com.github.javafaker.Faker;

@@ -1,6 +1,6 @@
-package com.dreamcup.member.repository.custom.impl;
+package com.dreamcup.friend.repository.custom.impl;
 
-import static com.dreamcup.member.entity.QFriendship.*;
+import static com.dreamcup.friend.entity.QFriendship.*;
 import static com.dreamcup.member.entity.QMember.*;
 
 import java.util.List;
@@ -10,10 +10,10 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import com.dreamcup.member.dto.request.FriendsSearchRequestDto;
-import com.dreamcup.member.dto.response.FriendsResponseDto;
-import com.dreamcup.member.dto.response.QFriendsResponseDto;
-import com.dreamcup.member.repository.custom.FriendshipRepositoryCustom;
+import com.dreamcup.friend.dto.request.FriendsSearchRequestDto;
+import com.dreamcup.friend.dto.respoonse.FriendResponseDto;
+import com.dreamcup.friend.dto.respoonse.QFriendResponseDto;
+import com.dreamcup.friend.repository.custom.FriendshipRepositoryCustom;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -26,9 +26,9 @@ public class FriendshipRepositoryImpl implements FriendshipRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
 	@Override
-	public Page<FriendsResponseDto> findPagedFriends(FriendsSearchRequestDto requestDto) {
-		List<FriendsResponseDto> content = jpaQueryFactory
-			.select(new QFriendsResponseDto(
+	public Page<FriendResponseDto> findPagedFriends(FriendsSearchRequestDto requestDto) {
+		List<FriendResponseDto> content = jpaQueryFactory
+			.select(new QFriendResponseDto(
 				member.id,
 				member.nickname
 			))

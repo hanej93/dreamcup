@@ -5,6 +5,7 @@ import static jakarta.persistence.CascadeType.*;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.dreamcup.friend.entity.Friendship;
 import com.dreamcup.member.code.AuthorityEnum;
 
 import jakarta.persistence.Column;
