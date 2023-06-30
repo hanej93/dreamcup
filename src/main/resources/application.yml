@@ -1,4 +1,7 @@
 spring:
+  profiles:
+    active: local
+
   datasource:
     url: jdbc:h2:mem:dreamcup
     username: sa

@@ -3,6 +3,7 @@ package com.dreamcup.mock;
 import java.util.List;
 import java.util.Locale;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +13,7 @@ import com.dreamcup.chatroom.dto.request.PublicChatRoomJoinRequestDto;
 import com.dreamcup.chatroom.service.ChatRoomService;
 import com.dreamcup.chatroom.service.ChatService;
 import com.dreamcup.chatroom.vo.ChatVo;
+import com.dreamcup.member.code.AuthorityEnum;
 import com.dreamcup.member.dto.request.MemberSignupRequestDto;
 import com.dreamcup.member.entity.Friendship;
 import com.dreamcup.member.entity.Member;
@@ -31,6 +33,7 @@ public class MockService {
 	private final MemberService memberService;
 	private final MemberRepository memberRepository;
 	private final FriendshipRepository friendshipRepository;
+	private final PasswordEncoder passwordEncoder;
 
 	private final ChatRoomService chatRoomService;
 	private final ChatService chatService;
@@ -46,6 +49,14 @@ public class MockService {
 				.build();
 			memberService.signup(requestDto);
 		}
+
+		Member member = Member.builder()
+			.username("admin")
+			.password(passwordEncoder.encode("1234"))
+			.nickname("admin")
+			.build();
+		member.addMemberAuthority(AuthorityEnum.ROLE_ADMIN);
+		memberRepository.save(member);
 	}
 
 	public void generateFriends() {
