@@ -1,13 +1,20 @@
 package com.dreamcup.friend.service;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.dreamcup.chatroom.code.MessageType;
 import com.dreamcup.friend.config.FriendExchangeConfig;
+import com.dreamcup.friend.dto.request.FriendChatsRequestDto;
 import com.dreamcup.friend.dto.request.FriendSendChatRequestDto;
+import com.dreamcup.friend.dto.respoonse.FriendChatResponseDto;
 import com.dreamcup.friend.entity.FriendChat;
+import com.dreamcup.friend.mapper.FriendChatMapper;
 import com.dreamcup.friend.repository.FriendChatRepository;
 import com.dreamcup.member.entity.Participant;
 import com.dreamcup.member.exception.UserNotFoundException;
@@ -49,6 +56,11 @@ public class FriendChatService {
 		// 메시지 소켓 전송
 		rabbitTemplate.convertAndSend(FriendExchangeConfig.FRIEND_EXCHANGE_NAME, senderRoutingKey, chat.getMessage());
 		rabbitTemplate.convertAndSend(FriendExchangeConfig.FRIEND_EXCHANGE_NAME, receiverRoutingKey, chat.getMessage());
+	}
+
+	public List<FriendChatResponseDto> getChatMessages(FriendChatsRequestDto requestDto) {
+		List<FriendChat> chatsWithFriend = friendChatRepository.findChatsWithFriend(requestDto);
+		return FriendChatMapper.INSTANCE.toFriendChatResponseDtoList(chatsWithFriend);
 	}
 
 }
