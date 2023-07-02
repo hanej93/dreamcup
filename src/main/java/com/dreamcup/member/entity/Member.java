@@ -11,6 +11,7 @@ import com.dreamcup.member.code.AuthorityEnum;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,6 +30,9 @@ public class Member extends Participant {
 
 	@OneToMany(mappedBy = "member", cascade = ALL, orphanRemoval = true)
 	private Set<MemberAuthority> authorities = new HashSet<>();
+
+	@OneToOne(mappedBy = "member", cascade = ALL)
+	private MemberStatus memberStatus;
 
 	@Override
 	public boolean isAnonymous() {

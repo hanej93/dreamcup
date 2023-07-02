@@ -4,6 +4,8 @@ import static com.dreamcup.friend.entity.QFriendChat.*;
 
 import java.util.List;
 
+import com.dreamcup.friend.code.ReadStatus;
+import com.dreamcup.friend.dto.request.FriendChatReadUpdateRequestDto;
 import com.dreamcup.friend.dto.request.FriendChatsRequestDto;
 import com.dreamcup.friend.entity.FriendChat;
 import com.dreamcup.friend.repository.custom.FriendChatRepositoryCustom;
@@ -37,5 +39,17 @@ public class FriendChatRepositoryImpl implements FriendChatRepositoryCustom {
 
 	private static BooleanExpression getSenderIdAndReceiverIdCondition(Long senderId, Long receiverId) {
 		return friendChat.sender.id.eq(senderId).and(friendChat.receiver.id.eq(receiverId));
+	}
+
+	@Override
+	public Long updateChatsAsRead(FriendChatReadUpdateRequestDto requestDto) {
+		return jpaQueryFactory.update(friendChat)
+			.set(friendChat.readStatus, ReadStatus.READ)
+			.where(
+				friendChat.sender.id.eq(requestDto.getFriendId()),
+				friendChat.receiver.id.eq(requestDto.getMemberId()),
+				friendChat.id.loe(requestDto.getLastChatId())
+			)
+			.execute();
 	}
 }

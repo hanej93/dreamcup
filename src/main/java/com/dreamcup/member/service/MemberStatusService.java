@@ -17,7 +17,6 @@ import com.dreamcup.member.entity.MemberStatus;
 import com.dreamcup.member.exception.UserNotFoundException;
 import com.dreamcup.member.mapper.MemberStatusMapper;
 import com.dreamcup.member.repository.MemberRepository;
-import com.dreamcup.member.repository.MemberStatusRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,7 +25,6 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 public class MemberStatusService {
 
-	private final MemberStatusRepository memberStatusRepository;
 	private final MemberRepository memberRepository;
 	private final FriendshipRepository friendshipRepository;
 	private final RabbitTemplate rabbitTemplate;
@@ -40,11 +38,8 @@ public class MemberStatusService {
 		Member member = memberRepository.findByUsername(username)
 			.orElseThrow(UserNotFoundException::new);
 
-		MemberStatus memberStatus = MemberStatus.builder()
-			.member(member)
-			.status(status)
-			.build();
-		memberStatusRepository.save(memberStatus);
+		MemberStatus memberStatus = member.getMemberStatus();
+		memberStatus.setStatus(status);
 
 		MemberStatusDto memberStatusDto = MemberStatusMapper.INSTANCE.toMemberStatusDto(memberStatus);
 		sendMyStatusToFriends(memberStatusDto, member);

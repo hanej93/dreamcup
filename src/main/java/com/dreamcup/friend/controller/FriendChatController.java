@@ -5,11 +5,13 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dreamcup.friend.dto.request.FriendChatReadUpdateRequestDto;
 import com.dreamcup.friend.dto.request.FriendChatsRequestDto;
 import com.dreamcup.friend.dto.request.FriendSendChatRequestDto;
 import com.dreamcup.friend.dto.respoonse.FriendChatResponseDto;
@@ -31,6 +33,12 @@ public class FriendChatController {
 	@PostMapping("/friend-chats")
 	public void sendChatMessage(@RequestBody @Valid FriendSendChatRequestDto requestDto) {
 		friendChatService.sendChatMessage(requestDto);
+	}
+
+	// 친구 메시지 읽음 변경
+	@PatchMapping("/friend-chats/read")
+	public void updateMessageAsRead(FriendChatReadUpdateRequestDto requestDto) {
+		friendChatService.updateMessageAsRead(requestDto);
 	}
 
 	// 친구 대화 목록 조회

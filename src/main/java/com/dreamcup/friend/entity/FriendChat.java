@@ -5,6 +5,8 @@ import static jakarta.persistence.GenerationType.*;
 
 import com.dreamcup.chatroom.code.MessageType;
 import com.dreamcup.common.entity.common.BaseTimeEntity;
+import com.dreamcup.friend.code.FriendChatMessageType;
+import com.dreamcup.friend.code.ReadStatus;
 import com.dreamcup.member.entity.Participant;
 
 import jakarta.persistence.Column;
@@ -45,6 +47,10 @@ public class FriendChat extends BaseTimeEntity {
 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
-	private MessageType messageType;
+	private FriendChatMessageType messageType;
+
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private ReadStatus readStatus;
 
 }

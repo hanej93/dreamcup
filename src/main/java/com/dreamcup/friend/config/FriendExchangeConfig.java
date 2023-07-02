@@ -14,6 +14,9 @@ public class FriendExchangeConfig {
 	public static final String FRIEND_MESSAGE_ROUTING_KEY = "message.*";
 	public static final String FRIEND_MESSAGE_QUEUE_NAME = "message.queue";
 
+	public static final String FRIEND_MESSAGE_READ_ROUTING_KEY = "message.read.*";
+	public static final String FRIEND_MESSAGE_READ_QUEUE_NAME = "message.read.queue";
+
 	public static final String FRIEND_STATUS_ROUTING_KEY = "status.*";
 	public static final String FRIEND_STATUS_QUEUE_NAME = "status.queue";
 
@@ -33,13 +36,23 @@ public class FriendExchangeConfig {
 	}
 
 	@Bean
+	public Queue friendMessageReadQueue() {
+		return new Queue(FRIEND_MESSAGE_READ_QUEUE_NAME, true);
+	}
+
+	@Bean
+	public Binding friendMessageReadBinding(Queue friendMessageReadQueue, TopicExchange friendExchange) {
+		return BindingBuilder.bind(friendMessageReadQueue).to(friendExchange).with(FRIEND_MESSAGE_READ_ROUTING_KEY);
+	}
+
+	@Bean
 	public Queue friendStatusQueue() {
 		return new Queue(FRIEND_STATUS_QUEUE_NAME, true);
 	}
 
 	@Bean
-	public Binding friendStatusBinding(Queue friendMessageQueue, TopicExchange friendExchange) {
-		return BindingBuilder.bind(friendMessageQueue).to(friendExchange).with(FRIEND_STATUS_ROUTING_KEY);
+	public Binding friendStatusBinding(Queue friendStatusQueue, TopicExchange friendExchange) {
+		return BindingBuilder.bind(friendStatusQueue).to(friendExchange).with(FRIEND_STATUS_ROUTING_KEY);
 	}
 
 }
