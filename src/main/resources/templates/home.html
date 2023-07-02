@@ -41,10 +41,15 @@
     let stompClient = null;
 
     $("#sub-btn").on("click", () => {
-        let socket = new SockJS('/ws');
         let txt = $("#sub-id").val();
+        let headers = {
+            'Authorization' : txt
+        }
+
+        let socket = new SockJS('/ws?token=testEJ');
+
         stompClient = Stomp.over(socket);
-        stompClient.connect({}, function(frame) {
+        stompClient.connect(headers, function(frame) {
             console.log('Connected: ' + frame);
             stompClient.subscribe('/exchange/friend.exchange/message.' + txt, function(message) {
                 console.log(`<<< message: ${message}`);
@@ -52,17 +57,17 @@
         });
     });
 
-    function connect() {
-        let socket = new SockJS('/ws');
-        stompClient = Stomp.over(socket);
-        stompClient.connect({}, function(frame) {
-            console.log('Connected: ' + frame);
-            stompClient.subscribe('/exchange/chat.exchange/message.100', function(message) {
-                console.log(`<<< message: ${message}`)
-                showMessage(JSON.parse(message.body));
-            });
-        });
-    }
+    // function connect() {
+    //     let socket = new SockJS('/ws');
+    //     stompClient = Stomp.over(socket);
+    //     stompClient.connect({}, function(frame) {
+    //         console.log('Connected: ' + frame);
+    //         stompClient.subscribe('/exchange/chat.exchange/message.100', function(message) {
+    //             console.log(`<<< message: ${message}`)
+    //             showMessage(JSON.parse(message.body));
+    //         });
+    //     });
+    // }
 
     function disconnect() {
         if (stompClient !== null) {
