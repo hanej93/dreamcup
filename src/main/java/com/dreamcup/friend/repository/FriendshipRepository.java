@@ -17,4 +17,6 @@ public interface FriendshipRepository extends JpaRepository<Friendship, Long>, F
 
 	@Query("SELECT f FROM Friendship f JOIN FETCH f.friend WHERE f.member = :member")
 	List<Friendship> findWithFriendByMember(@Param("member") Member member);
+
+	Long countByMemberAndAccepted(Member member, boolean acce);
 }

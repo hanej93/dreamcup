@@ -89,4 +89,11 @@ public class FriendService {
 	public Page<FriendResponseDto> getFriends(FriendsSearchRequestDto requestDto) {
 		return friendshipRepository.findPagedFriends(requestDto);
 	}
+
+	// 등록된 친구 수 조회
+	public Long countAcceptedFriends(Long memberId) {
+		Member member = memberRepository.findById(memberId)
+			.orElseThrow(UserNotFoundException::new);
+		return friendshipRepository.countByMemberAndAccepted(member, true);
+	}
 }

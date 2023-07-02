@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,6 +45,14 @@ public class FriendController {
 	public ResponseEntity<Page<FriendResponseDto>> getFriendList(@ModelAttribute FriendsSearchRequestDto requestDto) {
 		Page<FriendResponseDto> friends = friendService.getFriends(requestDto);
 		return new ResponseEntity(friends, HttpStatus.OK);
+	}
+
+	// todo: 요청 친구 수 추가 필요
+	// 등록된 친구 수 조회
+	@GetMapping("/friendship/count/{memberId}")
+	public ResponseEntity<Long> countFriends(@PathVariable Long memberId) {
+		Long count = friendService.countAcceptedFriends(memberId);
+		return ResponseEntity.ok(count);
 	}
 
 }
