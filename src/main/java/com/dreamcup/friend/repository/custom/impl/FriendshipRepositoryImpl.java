@@ -35,6 +35,7 @@ public class FriendshipRepositoryImpl implements FriendshipRepositoryCustom {
 			.from(friendship)
 			.join(friendship.friend, member)
 			.where(
+				getFriendshipMemberIdCondition(requestDto.getMemberId()),
 				getAcceptedCondition(requestDto.getAccepted())
 			)
 			.limit(requestDto.getSize())
@@ -46,7 +47,8 @@ public class FriendshipRepositoryImpl implements FriendshipRepositoryCustom {
 			.select(friendship.count())
 			.from(friendship)
 			.where(
-				friendship.accepted.eq(true)
+				getFriendshipMemberIdCondition(requestDto.getMemberId()),
+				getAcceptedCondition(requestDto.getAccepted())
 			)
 			.fetchOne();
 
@@ -55,12 +57,12 @@ public class FriendshipRepositoryImpl implements FriendshipRepositoryCustom {
 		return new PageImpl<>(content, pageable, total);
 	}
 
-	private BooleanExpression getAcceptedCondition(Boolean accepted) {
-		if (accepted == null) {
-			return null;
-		}
+	private BooleanExpression getFriendshipMemberIdCondition(Long memberId) {
+		return memberId != null ? friendship.member.id.eq(memberId) : null;
+	}
 
-		return friendship.accepted.eq(accepted);
+	private BooleanExpression getAcceptedCondition(Boolean accepted) {
+		return accepted != null ? friendship.accepted.eq(accepted) : null;
 	}
 
 }

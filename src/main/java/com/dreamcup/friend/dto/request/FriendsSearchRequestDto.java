@@ -2,6 +2,7 @@ package com.dreamcup.friend.dto.request;
 
 import static java.lang.Math.*;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +20,7 @@ public class FriendsSearchRequestDto {
 	private Integer page = 0;
 	@Builder.Default
 	private Integer size = 10;
+	@NotNull
 	private Long memberId;
 	private Boolean accepted;
 
