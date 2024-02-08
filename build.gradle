@@ -68,6 +68,11 @@ dependencies {
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 	implementation 'com.github.javafaker:javafaker:1.0.2'
 
+	// third-party
+	// excel(poi)
+	implementation 'org.apache.poi:poi:5.2.5'
+	implementation 'org.apache.poi:poi-ooxml:5.2.5'
+
 	// webjars
     implementation 'org.webjars:bootstrap:5.2.3'
 	implementation 'org.webjars:sockjs-client:1.5.1'
