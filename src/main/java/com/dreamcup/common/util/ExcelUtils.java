@@ -40,14 +40,14 @@ public class ExcelUtils {
         }
 
         private void updateHeaderNames() {
-            if (data == null | data.isEmpty()) {
+            if (data == null || data.isEmpty()) {
                 return;
             }
             headerNames = ExcelUtils.getExcelHeaderNames(data.get(0).getClass());
         }
 
         private void updateExcelData() {
-            if (data == null | data.isEmpty()) {
+            if (data == null || data.isEmpty()) {
                 return;
             }
             excelData = data.stream()
