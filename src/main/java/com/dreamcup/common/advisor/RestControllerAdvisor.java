@@ -55,12 +55,10 @@ public class RestControllerAdvisor {
 	public ErrorResponse internalServerErrorHandler(Exception e) {
 		log.error(e.getLocalizedMessage(), e);
 
-		ErrorResponse errorResponse = ErrorResponse.builder()
+		return ErrorResponse.builder()
 			.code("500")
 			.message("Internal Server Error")
 			.build();
-
-		return errorResponse;
 	}
 
 }
